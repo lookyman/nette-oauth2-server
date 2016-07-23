@@ -1,0 +1,40 @@
+{
+  "name": "lookyman/nette-oauth2-server",
+  "description": "Integration of The League of Extraordinary Packages' OAuth 2.0 Server into Nette Framework - base package",
+  "keywords": ["Nette", "League", "OAuth 2.0"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Lukáš Unger",
+      "email": "looky.msc@gmail.com",
+      "homepage": "https://lookyman.net"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "latte/latte": "^2.4",
+    "league/oauth2-server": "^5.1",
+    "lookyman/nette-oauth2-server-storage-implementation": "^1.0.0",
+    "nette/application": "^2.4",
+    "nette/security": "^2.4",
+    "nextras/secured-links": "^1.3",
+    "psr/log": "^1.0",
+    "zendframework/zend-diactoros": "^1.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.4"
+  },
+  "suggest": {
+    "psr/log-implementation": "Use PSR-3 logging."
+  },
+  "autoload": {
+    "psr-4": {
+      "Lookyman\\NetteOAuth2Server\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Lookyman\\NetteOAuth2Server\\Tests\\": "tests/"
+    }
+  }
+}

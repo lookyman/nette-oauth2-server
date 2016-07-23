@@ -1,0 +1,10 @@
+<div class="nette-oauth2-server-approve">
+    <h3>{$authorizationRequest->getClient()->getName()}</h3>
+    <ul n:if="!empty($authorizationRequest->getScopes())">
+        <li n:foreach="$authorizationRequest->getScopes() as $scope">{$scope->getIdentifier()}</li>
+    </ul>
+    <div class="btn-group" role="group" aria-label="...">
+        <a class="btn btn-success" n:href="approve!"><i class="fa fa-check"></i></a>
+        <a class="btn btn-danger" n:href="deny!"><i class="fa fa-times"></i></a>
+    </div>
+</div>
