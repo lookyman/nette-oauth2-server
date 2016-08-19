@@ -1,12 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace Lookyman\NetteOAuth2Server\UI;
 
-use League\OAuth2\Server\AuthorizationServer;
 use Lookyman\NetteOAuth2Server\RedirectConfig;
 use Lookyman\NetteOAuth2Server\Storage\IAuthorizationRequestSerializer;
 use Lookyman\NetteOAuth2Server\User\UserEntity;
 use Nette\Http\IResponse;
+use Nette\Security\User;
 use Nextras\Application\UI\SecuredLinksPresenterTrait;
 
 trait ApprovePresenterTrait
