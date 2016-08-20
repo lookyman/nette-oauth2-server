@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Lookyman\NetteOAuth2Server\UI;
 
@@ -33,6 +34,9 @@ class ApproveControl extends Control implements LoggerAwareInterface
 	 */
 	private $templateFile;
 
+	/**
+	 * @param AuthorizationServer $authorizationServer
+	 */
 	public function __construct(AuthorizationServer $authorizationServer)
 	{
 		$this->authorizationServer = $authorizationServer;
@@ -89,6 +93,9 @@ class ApproveControl extends Control implements LoggerAwareInterface
 		}
 	}
 
+	/**
+	 * @param AuthorizationRequest $authorizationRequest
+	 */
 	public function setAuthorizationRequest(AuthorizationRequest $authorizationRequest)
 	{
 		$this->authorizationRequest = $authorizationRequest;
@@ -97,7 +104,7 @@ class ApproveControl extends Control implements LoggerAwareInterface
 	/**
 	 * @param string $file
 	 */
-	public function setTemplateFile($file)
+	public function setTemplateFile(string $file)
 	{
 		$this->templateFile = $file;
 	}

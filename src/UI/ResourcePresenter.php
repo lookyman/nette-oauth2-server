@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Lookyman\NetteOAuth2Server\UI;
 
@@ -10,7 +11,6 @@ use Nette\Application\UI\Presenter;
 use Nette\Http\IResponse;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Zend\Diactoros\Stream;
 
 abstract class ResourcePresenter extends Presenter implements LoggerAwareInterface
 {

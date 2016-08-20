@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Lookyman\NetteOAuth2Server\User;
 
@@ -12,7 +13,7 @@ class UserEntity implements UserEntityInterface
 	private $identifier;
 
 	/**
-	 * @param $identifier
+	 * @param mixed $identifier
 	 */
 	public function __construct($identifier)
 	{

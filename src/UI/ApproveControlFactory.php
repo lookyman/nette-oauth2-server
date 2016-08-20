@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Lookyman\NetteOAuth2Server\UI;
 
@@ -26,7 +27,7 @@ class ApproveControlFactory implements IApproveControlFactory, LoggerAwareInterf
 	/**
 	 * @return ApproveControl
 	 */
-	public function create()
+	public function create(): ApproveControl
 	{
 		$control = new ApproveControl($this->authorizationServer);
 		if ($this->logger) {
