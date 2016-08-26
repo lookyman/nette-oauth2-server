@@ -24,10 +24,11 @@ class UserRepository implements UserRepositoryInterface
 	{
 		$this->user = $user;
 		$this->credentialsValidator = $credentialsValidator ?: function () {
+			$this->user->logout(true);
 			try {
 				call_user_func_array([$this->user, 'login'], func_get_args());
 
-			} catch (\Exception $e) {}
+			} catch (\Exception $e) {} // Fail silently
 
 			return $this->user->isLoggedIn() ? new UserEntity($this->user->getId()) : null;
 		};
