@@ -7,6 +7,9 @@ use Lookyman\NetteOAuth2Server\RedirectConfig;
 use Nette\Application\AbortException;
 use Nette\Application\BadRequestException;
 use Nette\Http\IResponse;
+use Nette\Http\Session;
+use Nette\Http\SessionSection;
+use Nette\Security\User;
 
 trait LoginPresenterTrait
 {
@@ -29,4 +32,22 @@ trait LoginPresenterTrait
 			call_user_func_array([$this, 'redirect'], $this->redirectConfig->getApproveDestination());
 		}
 	}
+
+	/**
+	 * @param string|null $message
+	 * @param int $code
+	 * @throws BadRequestException
+	 */
+	abstract public function error($message = null, $code = IResponse::S404_NOT_FOUND);
+
+	/**
+	 * @param string|null $namespace
+	 * @return Session|SessionSection
+	 */
+	abstract public function getSession($namespace = null);
+
+	/**
+	 * @return User
+	 */
+	abstract public function getUser();
 }

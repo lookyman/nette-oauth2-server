@@ -6,7 +6,11 @@ namespace Lookyman\NetteOAuth2Server\UI;
 use Lookyman\NetteOAuth2Server\RedirectConfig;
 use Lookyman\NetteOAuth2Server\Storage\IAuthorizationRequestSerializer;
 use Lookyman\NetteOAuth2Server\User\UserEntity;
+use Nette\Application\BadRequestException;
+use Nette\ComponentModel\IComponent;
 use Nette\Http\IResponse;
+use Nette\Http\Session;
+use Nette\Http\SessionSection;
 use Nette\Security\User;
 use Nextras\Application\UI\SecuredLinksPresenterTrait;
 
@@ -70,4 +74,29 @@ trait ApprovePresenterTrait
 
 		return $control;
 	}
+
+	/**
+	 * @param string|null $message
+	 * @param int $code
+	 * @throws BadRequestException
+	 */
+	abstract public function error($message = null, $code = IResponse::S404_NOT_FOUND);
+
+	/**
+	 * @param string $name
+	 * @param bool $need
+	 * @return IComponent|null mixed
+	 */
+	abstract public function getComponent($name, $need = true);
+
+	/**
+	 * @param string|null $namespace
+	 * @return Session|SessionSection
+	 */
+	abstract public function getSession($namespace = null);
+
+	/**
+	 * @return User
+	 */
+	abstract public function getUser();
 }

@@ -9,9 +9,13 @@ use Nette\Application\AbortException;
 use Nette\Application\UI\ComponentReflection;
 use Nette\Application\UI\Presenter;
 use Nette\Http\IResponse;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
+/**
+ * @method void onAuthorized(ServerRequestInterface $request)
+ */
 abstract class ResourcePresenter extends Presenter implements LoggerAwareInterface
 {
 	use LoggerAwareTrait;
