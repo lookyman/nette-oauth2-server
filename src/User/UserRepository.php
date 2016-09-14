@@ -20,13 +20,17 @@ class UserRepository implements UserRepositoryInterface
 	 */
 	private $credentialsValidator;
 
+	/**
+	 * @param User $user
+	 * @param callable|null $credentialsValidator
+	 */
 	public function __construct(User $user, callable $credentialsValidator = null)
 	{
 		$this->user = $user;
 		$this->credentialsValidator = $credentialsValidator ?: function () {
 			$this->user->logout(true);
 			try {
-				call_user_func_array([$this->user, 'login'], func_get_args());
+				$this->user->login(...func_get_args());
 
 			} catch (\Exception $e) {} // Fail silently
 
@@ -35,8 +39,6 @@ class UserRepository implements UserRepositoryInterface
 	}
 
 	/**
-	 * Get a user entity.
-	 *
 	 * @param string $username
 	 * @param string $password
 	 * @param string $grantType

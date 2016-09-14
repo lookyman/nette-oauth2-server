@@ -7,17 +7,32 @@ use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
 use Nette\Application\AbortException;
+use Nette\Application\IResponse;
 use Nette\Application\UI\Control;
-use Nette\Http\IResponse;
+use Nette\Http\IResponse as HttpResponse;
 use Nextras\Application\UI\SecuredLinksControlTrait;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
+/**
+ * @method void onAuthorizationComplete()
+ * @method void onResponse(IResponse $response)
+ */
 class ApproveControl extends Control implements LoggerAwareInterface
 {
 	use LoggerAwareTrait;
 	use Psr7Trait;
 	use SecuredLinksControlTrait;
+
+	/**
+	 * @var callable[]
+	 */
+	public $onAuthorizationComplete;
+
+	/**
+	 * @var callable[]
+	 */
+	public $onResponse;
 
 	/**
 	 * @var AuthorizationRequest|null
@@ -70,18 +85,17 @@ class ApproveControl extends Control implements LoggerAwareInterface
 
 	public function completeAuthorizationRequest()
 	{
-		$this->getPresenter()->getSession(OAuth2Presenter::SESSION_NAMESPACE)->remove();
+		$this->onAuthorizationComplete();
 
+		$response = $this->createResponse();
 		try {
-			$response = $this->createResponse();
-
-			$this->getPresenter()->sendResponse($this->authorizationServer->completeAuthorizationRequest($this->authorizationRequest, $response));
+			$this->onResponse($this->authorizationServer->completeAuthorizationRequest($this->authorizationRequest, $response));
 
 		} catch (AbortException $e) {
 			throw $e;
 
 		} catch (OAuthServerException $e) {
-			$this->getPresenter()->sendResponse($e->generateHttpResponse($response));
+			$this->onResponse($e->generateHttpResponse($response));
 
 		} catch (\Exception $e) {
 			if ($this->logger) {
@@ -89,7 +103,7 @@ class ApproveControl extends Control implements LoggerAwareInterface
 			}
 			$body = $this->createStream();
 			$body->write('Unknown error');
-			$this->getPresenter()->sendResponse($response->withStatus(IResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body));
+			$this->onResponse($response->withStatus(HttpResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body));
 		}
 	}
 

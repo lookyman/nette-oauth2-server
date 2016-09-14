@@ -24,7 +24,7 @@ abstract class ResourcePresenter extends Presenter implements LoggerAwareInterfa
 	/**
 	 * @var callable[]
 	 */
-	public $onAuthorized = [];
+	public $onAuthorized;
 
 	/**
 	 * @var ResourceServer
@@ -42,10 +42,9 @@ abstract class ResourcePresenter extends Presenter implements LoggerAwareInterfa
 			return;
 		}
 
+		$request = $this->createServerRequest();
+		$response = $this->createResponse();
 		try {
-			$request = $this->createServerRequest();
-			$response = $this->createResponse();
-
 			$request = $this->resourceServer->validateAuthenticatedRequest($request);
 
 		} catch (OAuthServerException $e) {

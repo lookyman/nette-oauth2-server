@@ -17,4 +17,22 @@ class RedirectConfigTest extends \PHPUnit_Framework_TestCase
 		self::assertCount(1, $login);
 		self::assertEquals('login', array_pop($login));
 	}
+
+	/**
+	 * @expectedException \Nette\InvalidStateException
+	 */
+	public function testEmptyApproveDestination()
+	{
+		$config = new RedirectConfig(null, 'login');
+		$config->getApproveDestination();
+	}
+
+	/**
+	 * @expectedException \Nette\InvalidStateException
+	 */
+	public function testEmptyLoginDestination()
+	{
+		$config = new RedirectConfig('approve', null);
+		$config->getLoginDestination();
+	}
 }
