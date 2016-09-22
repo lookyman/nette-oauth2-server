@@ -10,9 +10,16 @@ Integration of [The League of Extraordinary Packages](https://thephpleague.com/)
 [![Latest stable](https://img.shields.io/packagist/v/lookyman/nette-oauth2-server.svg)](https://packagist.org/packages/lookyman/nette-oauth2-server)
 
 
+Requirements
+------------
+
+- [Kdyby/Events](https://github.com/Kdyby/Events)
+
+
 Installation
 ------------
 
 For installation instructions see one of the storage implementations.
 
 - [Doctrine](https://github.com/lookyman/nette-oauth2-server-doctrine)
+- You can contribute with another one!

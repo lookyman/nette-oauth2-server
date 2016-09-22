@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Lookyman\NetteOAuth2Server\UI;
 
+use Lookyman\NetteOAuth2Server\Psr7\ApplicationPsr7ResponseInterface;
 use Lookyman\NetteOAuth2Server\RedirectConfig;
 use Lookyman\NetteOAuth2Server\Storage\IAuthorizationRequestSerializer;
 use Lookyman\NetteOAuth2Server\User\UserEntity;
-use Nette\Application\BadRequestException;
-use Nette\ComponentModel\IComponent;
-use Nette\Http\IResponse;
+use Nette\Application\AbortException;
+use Nette\Application\IResponse;
 use Nette\Http\Session;
 use Nette\Http\SessionSection;
 use Nette\Security\User;
@@ -36,30 +36,30 @@ trait ApprovePresenterTrait
 	 */
 	public $redirectConfig;
 
-	protected function initializeApproveComponent()
-	{
-		$this->getComponent('approve');
-	}
-
 	/**
 	 * @return ApproveControl
 	 */
-	protected function createComponentApprove()
+	protected function createComponentApprove(): ApproveControl
 	{
 		$control = $this->approveControlFactory->create();
 
+		$control->onAuthorizationComplete[] = function () {
+			$this->getSession(OAuth2Presenter::SESSION_NAMESPACE)->remove();
+		};
+
+		$control->onResponse[] = function (ApplicationPsr7ResponseInterface $response) {
+			$this->sendResponse($response);
+		};
+
 		$control->onAnchor[] = function (ApproveControl $control) {
-			if (!$this->redirectConfig) {
-				$this->error('RedirectConfig not set', IResponse::S500_INTERNAL_SERVER_ERROR);
-			}
 			if (!$this->getUser()->isLoggedIn()) {
-				call_user_func_array([$this, 'redirect'], $this->redirectConfig->getLoginDestination());
+				$this->redirect(...$this->redirectConfig->getLoginDestination());
 			}
 
 			$data = $this->getSession(OAuth2Presenter::SESSION_NAMESPACE)->authorizationRequest;
 			$authorizationRequest = $data ? $this->authorizationRequestSerializer->unserialize($data) : null;
 			if (!$authorizationRequest) {
-				$this->error('No authorization request in session', IResponse::S400_BAD_REQUEST);
+				return;
 			}
 
 			if (!$authorizationRequest->getUser()) {
@@ -76,20 +76,6 @@ trait ApprovePresenterTrait
 	}
 
 	/**
-	 * @param string|null $message
-	 * @param int $code
-	 * @throws BadRequestException
-	 */
-	abstract public function error($message = null, $code = IResponse::S404_NOT_FOUND);
-
-	/**
-	 * @param string $name
-	 * @param bool $need
-	 * @return IComponent|null mixed
-	 */
-	abstract public function getComponent($name, $need = true);
-
-	/**
 	 * @param string|null $namespace
 	 * @return Session|SessionSection
 	 */
@@ -99,4 +85,18 @@ trait ApprovePresenterTrait
 	 * @return User
 	 */
 	abstract public function getUser();
+
+	/**
+	 * @param int $code [optional]
+	 * @param string|null $destination
+	 * @param array|mixed $args
+	 * @throws AbortException
+	 */
+	abstract public function redirect($code, $destination = null, $args = []);
+
+	/**
+	 * @param IResponse $response
+	 * @throws AbortException
+	 */
+	abstract public function sendResponse(IResponse $response);
 }
