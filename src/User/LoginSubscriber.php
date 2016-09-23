@@ -8,6 +8,7 @@ use Lookyman\NetteOAuth2Server\RedirectConfig;
 use Lookyman\NetteOAuth2Server\UI\OAuth2Presenter;
 use Nette\Application\AbortException;
 use Nette\Application\Application;
+use Nette\Application\IPresenter;
 use Nette\Application\UI\Presenter;
 use Nette\InvalidStateException;
 use Nette\Security\User;
@@ -15,7 +16,7 @@ use Nette\Security\User;
 class LoginSubscriber implements Subscriber
 {
 	/**
-	 * @var Presenter|null
+	 * @var IPresenter|null
 	 */
 	private $presenter;
 
@@ -41,9 +42,9 @@ class LoginSubscriber implements Subscriber
 
 	/**
 	 * @param Application $application
-	 * @param Presenter $presenter
+	 * @param IPresenter $presenter
 	 */
-	public function onPresenter(Application $application, Presenter $presenter)
+	public function onPresenter(Application $application, IPresenter $presenter)
 	{
 		$this->presenter = $presenter;
 	}
@@ -58,7 +59,7 @@ class LoginSubscriber implements Subscriber
 		if (!$this->presenter) {
 			throw new InvalidStateException('Presenter not set');
 		}
-		if ($this->presenter->getSession(OAuth2Presenter::SESSION_NAMESPACE)->authorizationRequest) {
+		if ($this->presenter instanceof Presenter && $this->presenter->getSession(OAuth2Presenter::SESSION_NAMESPACE)->authorizationRequest) {
 			$this->presenter->redirect(...$this->redirectConfig->getApproveDestination());
 		}
 	}
