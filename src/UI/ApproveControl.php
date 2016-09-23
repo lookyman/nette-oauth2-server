@@ -10,12 +10,12 @@ use Nette\Application\AbortException;
 use Nette\Application\IResponse;
 use Nette\Application\UI\Control;
 use Nette\Http\IResponse as HttpResponse;
+use Nette\Http\Session;
 use Nextras\Application\UI\SecuredLinksControlTrait;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
 /**
- * @method void onAuthorizationComplete()
  * @method void onResponse(IResponse $response)
  */
 class ApproveControl extends Control implements LoggerAwareInterface
@@ -27,15 +27,10 @@ class ApproveControl extends Control implements LoggerAwareInterface
 	/**
 	 * @var callable[]
 	 */
-	public $onAuthorizationComplete;
-
-	/**
-	 * @var callable[]
-	 */
 	public $onResponse;
 
 	/**
-	 * @var AuthorizationRequest|null
+	 * @var AuthorizationRequest
 	 */
 	private $authorizationRequest;
 
@@ -45,16 +40,25 @@ class ApproveControl extends Control implements LoggerAwareInterface
 	private $authorizationServer;
 
 	/**
+	 * @var Session
+	 */
+	private $session;
+
+	/**
 	 * @var string
 	 */
 	private $templateFile;
 
 	/**
 	 * @param AuthorizationServer $authorizationServer
+	 * @param Session $session
+	 * @param AuthorizationRequest $authorizationRequest
 	 */
-	public function __construct(AuthorizationServer $authorizationServer)
+	public function __construct(AuthorizationServer $authorizationServer, Session $session, AuthorizationRequest $authorizationRequest)
 	{
 		$this->authorizationServer = $authorizationServer;
+		$this->session = $session;
+		$this->authorizationRequest = $authorizationRequest;
 		$this->templateFile = __DIR__ . '/templates/approve.latte';
 	}
 
@@ -83,9 +87,9 @@ class ApproveControl extends Control implements LoggerAwareInterface
 		$this->completeAuthorizationRequest();
 	}
 
-	public function completeAuthorizationRequest()
+	private function completeAuthorizationRequest()
 	{
-		$this->onAuthorizationComplete();
+		$this->session->getSection(OAuth2Presenter::SESSION_NAMESPACE)->remove();
 
 		$response = $this->createResponse();
 		try {
@@ -105,14 +109,6 @@ class ApproveControl extends Control implements LoggerAwareInterface
 			$body->write('Unknown error');
 			$this->onResponse($response->withStatus(HttpResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body));
 		}
-	}
-
-	/**
-	 * @param AuthorizationRequest $authorizationRequest
-	 */
-	public function setAuthorizationRequest(AuthorizationRequest $authorizationRequest)
-	{
-		$this->authorizationRequest = $authorizationRequest;
 	}
 
 	/**
