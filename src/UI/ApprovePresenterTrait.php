@@ -8,7 +8,9 @@ use Lookyman\NetteOAuth2Server\RedirectConfig;
 use Lookyman\NetteOAuth2Server\Storage\IAuthorizationRequestSerializer;
 use Lookyman\NetteOAuth2Server\User\UserEntity;
 use Nette\Application\AbortException;
+use Nette\Application\BadRequestException;
 use Nette\Application\IResponse;
+use Nette\Http\IResponse as HttpResponse;
 use Nette\Http\Session;
 use Nette\Http\SessionSection;
 use Nette\Security\User;
@@ -38,42 +40,39 @@ trait ApprovePresenterTrait
 
 	/**
 	 * @return ApproveControl
+	 * @throws AbortException
+	 * @throws BadRequestException
 	 */
 	protected function createComponentApprove(): ApproveControl
 	{
-		$control = $this->approveControlFactory->create();
+		if (!$this->getUser()->isLoggedIn()) {
+			$this->redirect(...$this->redirectConfig->getLoginDestination());
+		}
 
-		$control->onAuthorizationComplete[] = function () {
-			$this->getSession(OAuth2Presenter::SESSION_NAMESPACE)->remove();
-		};
+		/** @var string $data */
+		$data = $this->getSession(OAuth2Presenter::SESSION_NAMESPACE)->authorizationRequest;
+		$authorizationRequest = $data ? $this->authorizationRequestSerializer->unserialize($data) : null;
 
-		$control->onResponse[] = function (ApplicationPsr7ResponseInterface $response) {
-			$this->sendResponse($response);
-		};
-
-		$control->onAnchor[] = function (ApproveControl $control) {
-			if (!$this->getUser()->isLoggedIn()) {
-				$this->redirect(...$this->redirectConfig->getLoginDestination());
-			}
-
-			$data = $this->getSession(OAuth2Presenter::SESSION_NAMESPACE)->authorizationRequest;
-			$authorizationRequest = $data ? $this->authorizationRequestSerializer->unserialize($data) : null;
-			if (!$authorizationRequest) {
-				return;
-			}
-
+		if ($authorizationRequest) {
 			if (!$authorizationRequest->getUser()) {
 				$authorizationRequest->setUser(new UserEntity($this->getUser()->getId()));
 			}
-			$control->setAuthorizationRequest($authorizationRequest);
+			$control = $this->approveControlFactory->create($authorizationRequest);
+			$control->onResponse[] = function (ApplicationPsr7ResponseInterface $response) {
+				$this->sendResponse($response);
+			};
+			return $control;
+		}
 
-			if ($authorizationRequest->isAuthorizationApproved()) {
-				$control->completeAuthorizationRequest();
-			}
-		};
-
-		return $control;
+		$this->error(null, HttpResponse::S400_BAD_REQUEST);
 	}
+
+	/**
+	 * @param string|null $message
+	 * @param int $code
+	 * @throws BadRequestException
+	 */
+	abstract public function error($message = null, $code = HttpResponse::S404_NOT_FOUND);
 
 	/**
 	 * @param string|null $namespace
