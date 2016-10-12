@@ -4,7 +4,7 @@
         <li n:foreach="$authorizationRequest->getScopes() as $scope">{$scope->getIdentifier()}</li>
     </ul>
     <div class="btn-group" role="group" aria-label="...">
-        <a class="btn btn-success" n:href="approve!"><i class="fa fa-check"></i></a>
-        <a class="btn btn-danger" n:href="deny!"><i class="fa fa-times"></i></a>
+        <a class="btn btn-success" n:href="approve!">Approve</a>
+        <a class="btn btn-danger" n:href="deny!">Deny</a>
     </div>
 </div>
