@@ -23,8 +23,16 @@ class RedirectConfig
 	 */
 	public function __construct($approveDestination, $loginDestination)
 	{
+		$this->setApproveDestination($approveDestination);
+		$this->setLoginDestination($loginDestination);
+	}
+
+	/**
+	 * @param string|array|null $approveDestination
+	 */
+	public function setApproveDestination($approveDestination)
+	{
 		$this->approveDestination = (array) $approveDestination;
-		$this->loginDestination = (array) $loginDestination;
 	}
 
 	/**
@@ -37,6 +45,14 @@ class RedirectConfig
 			throw new InvalidStateException('Approve destination not set');
 		}
 		return $this->approveDestination;
+	}
+
+	/**
+	 * @param string|array|null $loginDestination
+	 */
+	public function setLoginDestination($loginDestination)
+	{
+		$this->loginDestination = (array) $loginDestination;
 	}
 
 	/**
