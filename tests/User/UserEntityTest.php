@@ -1,12 +1,17 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\Tests\User;
+declare(strict_types = 1);
 
-use Lookyman\NetteOAuth2Server\User\UserEntity;
+namespace Lookyman\Nette\OAuth2\Server\User;
 
-class UserEntityTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @covers \Lookyman\Nette\OAuth2\Server\User\UserEntity
+ */
+final class UserEntityTest extends TestCase
 {
+
 	public function testIdentifier()
 	{
 		$entity = new UserEntity('test');

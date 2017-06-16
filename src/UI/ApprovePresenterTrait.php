@@ -1,24 +1,25 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\UI;
+declare(strict_types = 1);
 
-use Lookyman\NetteOAuth2Server\Psr7\ApplicationPsr7ResponseInterface;
-use Lookyman\NetteOAuth2Server\RedirectConfig;
-use Lookyman\NetteOAuth2Server\Storage\IAuthorizationRequestSerializer;
-use Lookyman\NetteOAuth2Server\User\UserEntity;
-use Nette\Application\AbortException;
-use Nette\Application\BadRequestException;
+namespace Lookyman\Nette\OAuth2\Server\UI;
+
+use Lookyman\Nette\OAuth2\Server\Psr7\ApplicationPsr7ResponseInterface;
+use Lookyman\Nette\OAuth2\Server\RedirectConfig;
+use Lookyman\Nette\OAuth2\Server\Storage\IAuthorizationRequestSerializer;
+use Lookyman\Nette\OAuth2\Server\User\UserEntity;
 use Nette\Application\IResponse;
 use Nette\Http\IResponse as HttpResponse;
-use Nette\Http\Session;
-use Nette\Http\SessionSection;
-use Nette\Security\User;
 use Nextras\Application\UI\SecuredLinksPresenterTrait;
 
 trait ApprovePresenterTrait
 {
 	use SecuredLinksPresenterTrait;
+
+	/**
+	 * @var callable[]
+	 */
+	public $onBeforeRedirect = [];
 
 	/**
 	 * @var IApproveControlFactory
@@ -38,11 +39,6 @@ trait ApprovePresenterTrait
 	 */
 	public $redirectConfig;
 
-	/**
-	 * @return ApproveControl
-	 * @throws AbortException
-	 * @throws BadRequestException
-	 */
 	protected function createComponentApprove(): ApproveControl
 	{
 		if (!$this->getUser()->isLoggedIn()) {
@@ -68,26 +64,16 @@ trait ApprovePresenterTrait
 	}
 
 	/**
-	 * @param string|null $message
-	 * @param int $code
-	 * @throws BadRequestException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
 	abstract public function error($message = null, $code = HttpResponse::S404_NOT_FOUND);
 
 	/**
-	 * @param string|null $namespace
-	 * @return Session|SessionSection
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
 	abstract public function getSession($namespace = null);
 
-	/**
-	 * @return User
-	 */
 	abstract public function getUser();
 
-	/**
-	 * @param IResponse $response
-	 * @throws AbortException
-	 */
 	abstract public function sendResponse(IResponse $response);
 }

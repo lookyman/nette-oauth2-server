@@ -1,13 +1,14 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\Tests\Mock;
+declare(strict_types = 1);
 
-use Lookyman\NetteOAuth2Server\UI\ApproveControl;
-use Lookyman\NetteOAuth2Server\UI\ApprovePresenterTrait;
+namespace Lookyman\Nette\OAuth2\Server\Mock;
+
+use Lookyman\Nette\OAuth2\Server\UI\ApproveControl;
+use Lookyman\Nette\OAuth2\Server\UI\ApprovePresenterTrait;
 use Nette\Application\UI\Presenter;
 
-class ApprovePresenterMock extends Presenter
+final class ApprovePresenterMock extends Presenter
 {
 	use ApprovePresenterTrait;
 

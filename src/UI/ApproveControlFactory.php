@@ -1,7 +1,8 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\UI;
+declare(strict_types = 1);
+
+namespace Lookyman\Nette\OAuth2\Server\UI;
 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
@@ -9,7 +10,7 @@ use Nette\Http\Session;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
-class ApproveControlFactory implements IApproveControlFactory, LoggerAwareInterface
+final class ApproveControlFactory implements IApproveControlFactory, LoggerAwareInterface
 {
 	use LoggerAwareTrait;
 
@@ -23,20 +24,12 @@ class ApproveControlFactory implements IApproveControlFactory, LoggerAwareInterf
 	 */
 	private $session;
 
-	/**
-	 * @param AuthorizationServer $authorizationServer
-	 * @param Session $session
-	 */
 	public function __construct(AuthorizationServer $authorizationServer, Session $session)
 	{
 		$this->authorizationServer = $authorizationServer;
 		$this->session = $session;
 	}
 
-	/**
-	 * @param AuthorizationRequest $authorizationRequest
-	 * @return ApproveControl
-	 */
 	public function create(AuthorizationRequest $authorizationRequest): ApproveControl
 	{
 		$control = new ApproveControl($this->authorizationServer, $this->session, $authorizationRequest);

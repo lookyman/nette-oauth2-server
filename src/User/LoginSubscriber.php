@@ -1,20 +1,21 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\User;
+declare(strict_types = 1);
+
+namespace Lookyman\Nette\OAuth2\Server\User;
 
 use Kdyby\Events\Subscriber;
-use Lookyman\NetteOAuth2Server\RedirectConfig;
-use Lookyman\NetteOAuth2Server\UI\OAuth2Presenter;
-use Nette\Application\AbortException;
+use Lookyman\Nette\OAuth2\Server\RedirectConfig;
+use Lookyman\Nette\OAuth2\Server\UI\OAuth2Presenter;
 use Nette\Application\Application;
 use Nette\Application\IPresenter;
 use Nette\Application\UI\Presenter;
 use Nette\InvalidStateException;
 use Nette\Security\User;
 
-class LoginSubscriber implements Subscriber
+final class LoginSubscriber implements Subscriber
 {
+
 	/**
 	 * @var IPresenter|null
 	 */
@@ -30,30 +31,17 @@ class LoginSubscriber implements Subscriber
 	 */
 	private $redirectConfig;
 
-	/**
-	 * @param RedirectConfig $redirectConfig
-	 * @param int $priority
-	 */
 	public function __construct(RedirectConfig $redirectConfig, int $priority = 0)
 	{
 		$this->redirectConfig = $redirectConfig;
 		$this->priority = $priority;
 	}
 
-	/**
-	 * @param Application $application
-	 * @param IPresenter $presenter
-	 */
 	public function onPresenter(Application $application, IPresenter $presenter)
 	{
 		$this->presenter = $presenter;
 	}
 
-	/**
-	 * @param User $user
-	 * @throws InvalidStateException
-	 * @throws AbortException
-	 */
 	public function onLoggedIn(User $user)
 	{
 		if (!$this->presenter) {
@@ -64,13 +52,10 @@ class LoginSubscriber implements Subscriber
 		}
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getSubscribedEvents()
+	public function getSubscribedEvents(): array
 	{
 		return [
-			Application::class . '::onPresenter',
+			Application::class . '::onPresenter' => 'onPresenter',
 			User::class . '::onLoggedIn' => [
 				['onLoggedIn', $this->priority],
 			],

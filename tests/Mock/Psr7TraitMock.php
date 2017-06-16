@@ -1,14 +1,15 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\Tests\Mock;
+declare(strict_types = 1);
 
-use Lookyman\NetteOAuth2Server\Psr7\ApplicationPsr7ResponseInterface;
-use Lookyman\NetteOAuth2Server\UI\Psr7Trait;
+namespace Lookyman\Nette\OAuth2\Server\Mock;
+
+use Lookyman\Nette\OAuth2\Server\Psr7\ApplicationPsr7ResponseInterface;
+use Lookyman\Nette\OAuth2\Server\UI\Psr7Trait;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 
-class Psr7TraitMock
+final class Psr7TraitMock
 {
 	use Psr7Trait;
 

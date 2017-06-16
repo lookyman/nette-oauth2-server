@@ -1,55 +1,24 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\Tests;
+declare(strict_types = 1);
 
-use Lookyman\NetteOAuth2Server\RedirectConfig;
+namespace Lookyman\Nette\OAuth2\Server;
 
-class RedirectConfigTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @covers \Lookyman\Nette\OAuth2\Server\RedirectConfig
+ */
+final class RedirectConfigTest extends TestCase
 {
+
 	public function testGet()
 	{
-		self::markTestSkipped('fixme');
-		/*$config = new RedirectConfig('approve', 'login');
-		self::assertInternalType('array', $approve = $config->getApproveDestination());
-		self::assertCount(1, $approve);
-		self::assertEquals('approve', array_pop($approve));
-		self::assertInternalType('array', $login = $config->getLoginDestination());
-		self::assertCount(1, $login);
-		self::assertEquals('login', array_pop($login));*/
+		self::markTestIncomplete('todo');
 	}
 
 	public function testSet()
 	{
-		self::markTestSkipped('fixme');
-		/*$config = new RedirectConfig(null, null);
-		$config->setApproveDestination('approve');
-		$config->setLoginDestination('login');
-		self::assertInternalType('array', $approve = $config->getApproveDestination());
-		self::assertCount(1, $approve);
-		self::assertEquals('approve', array_pop($approve));
-		self::assertInternalType('array', $login = $config->getLoginDestination());
-		self::assertCount(1, $login);
-		self::assertEquals('login', array_pop($login));*/
-	}
-
-	/**
-	 * @expectedException \Nette\InvalidStateException
-	 */
-	public function testEmptyApproveDestination()
-	{
-		self::markTestSkipped('fixme');
-		/*$config = new RedirectConfig(null, 'login');
-		$config->getApproveDestination();*/
-	}
-
-	/**
-	 * @expectedException \Nette\InvalidStateException
-	 */
-	public function testEmptyLoginDestination()
-	{
-		self::markTestSkipped('fixme');
-		/*$config = new RedirectConfig('approve', null);
-		$config->getLoginDestination();*/
+		self::markTestIncomplete('todo');
 	}
 }

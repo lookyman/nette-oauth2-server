@@ -1,7 +1,8 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server;
+declare(strict_types = 1);
+
+namespace Lookyman\Nette\OAuth2\Server;
 
 use Nette\Application\UI\Component;
 use Nette\InvalidStateException;
@@ -11,7 +12,7 @@ use Nette\SmartObject;
  * @method void onBeforeApproveRedirect(RedirectConfig $redirectConfig)
  * @method void onBeforeLoginRedirect(RedirectConfig $redirectConfig)
  */
-class RedirectConfig
+final class RedirectConfig
 {
 	use SmartObject;
 
@@ -53,10 +54,6 @@ class RedirectConfig
 		$this->approveDestination = (array) $approveDestination;
 	}
 
-	/**
-	 * @param Component $component
-	 * @throws InvalidStateException
-	 */
 	public function redirectToApproveDestination(Component $component)
 	{
 		if (empty($this->approveDestination)) {
@@ -74,10 +71,6 @@ class RedirectConfig
 		$this->loginDestination = (array) $loginDestination;
 	}
 
-	/**
-	 * @param Component $component
-	 * @throws InvalidStateException
-	 */
 	public function redirectToLoginDestination(Component $component)
 	{
 		if (empty($this->loginDestination)) {
