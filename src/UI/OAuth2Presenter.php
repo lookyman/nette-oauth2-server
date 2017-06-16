@@ -87,9 +87,9 @@ class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 				$this->authorizationServer->validateAuthorizationRequest($this->createServerRequest())
 			);
 			if (!$this->getUser()->isLoggedIn()) {
-				$this->redirect(...$this->redirectConfig->getLoginDestination());
+				$this->redirectConfig->redirectToLoginDestination($this);
 			}
-			$this->redirect(...$this->redirectConfig->getApproveDestination());
+			$this->redirectConfig->redirectToApproveDestination($this);
 
 		} catch (AbortException $e) {
 			throw $e;

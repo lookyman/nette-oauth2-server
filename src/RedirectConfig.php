@@ -3,10 +3,28 @@ declare(strict_types=1);
 
 namespace Lookyman\NetteOAuth2Server;
 
+use Nette\Application\UI\Component;
 use Nette\InvalidStateException;
+use Nette\SmartObject;
 
+/**
+ * @method void onBeforeApproveRedirect(RedirectConfig $redirectConfig)
+ * @method void onBeforeLoginRedirect(RedirectConfig $redirectConfig)
+ */
 class RedirectConfig
 {
+	use SmartObject;
+
+	/**
+	 * @var callable[]
+	 */
+	public $onBeforeApproveRedirect = [];
+
+	/**
+	 * @var callable[]
+	 */
+	public $onBeforeLoginRedirect = [];
+
 	/**
 	 * @var array
 	 */
@@ -36,15 +54,16 @@ class RedirectConfig
 	}
 
 	/**
-	 * @return array
+	 * @param Component $component
 	 * @throws InvalidStateException
 	 */
-	public function getApproveDestination(): array
+	public function redirectToApproveDestination(Component $component)
 	{
 		if (empty($this->approveDestination)) {
 			throw new InvalidStateException('Approve destination not set');
 		}
-		return $this->approveDestination;
+		$this->onBeforeApproveRedirect($this);
+		$component->redirect(...$this->approveDestination);
 	}
 
 	/**
@@ -56,14 +75,15 @@ class RedirectConfig
 	}
 
 	/**
-	 * @return array
+	 * @param Component $component
 	 * @throws InvalidStateException
 	 */
-	public function getLoginDestination(): array
+	public function redirectToLoginDestination(Component $component)
 	{
 		if (empty($this->loginDestination)) {
 			throw new InvalidStateException('Login destination not set');
 		}
-		return $this->loginDestination;
+		$this->onBeforeLoginRedirect($this);
+		$component->redirect(...$this->loginDestination);
 	}
 }

@@ -46,7 +46,7 @@ trait ApprovePresenterTrait
 	protected function createComponentApprove(): ApproveControl
 	{
 		if (!$this->getUser()->isLoggedIn()) {
-			$this->redirect(...$this->redirectConfig->getLoginDestination());
+			$this->redirectConfig->redirectToLoginDestination($this);
 		}
 
 		/** @var string $data */
@@ -84,14 +84,6 @@ trait ApprovePresenterTrait
 	 * @return User
 	 */
 	abstract public function getUser();
-
-	/**
-	 * @param int $code [optional]
-	 * @param string|null $destination
-	 * @param array|mixed $args
-	 * @throws AbortException
-	 */
-	abstract public function redirect($code, $destination = null, $args = []);
 
 	/**
 	 * @param IResponse $response
