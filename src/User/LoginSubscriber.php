@@ -60,7 +60,7 @@ class LoginSubscriber implements Subscriber
 			throw new InvalidStateException('Presenter not set');
 		}
 		if ($this->presenter instanceof Presenter && $this->presenter->getSession(OAuth2Presenter::SESSION_NAMESPACE)->authorizationRequest) {
-			$this->presenter->redirect(...$this->redirectConfig->getApproveDestination());
+			$this->redirectConfig->redirectToApproveDestination($this->presenter);
 		}
 	}
 
