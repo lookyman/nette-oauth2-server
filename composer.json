@@ -14,7 +14,7 @@
     "php": ">=7.0",
     "kdyby/events": "^3.0",
     "latte/latte": "^2.4",
-    "league/oauth2-server": "^5.1",
+    "league/oauth2-server": "^6.0",
     "nette/application": "^2.4",
     "nette/security": "^2.4",
     "nextras/secured-links": "^1.4",
