@@ -1,12 +1,14 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\User;
+declare(strict_types = 1);
+
+namespace Lookyman\Nette\OAuth2\Server\User;
 
 use League\OAuth2\Server\Entities\UserEntityInterface;
 
-class UserEntity implements UserEntityInterface
+final class UserEntity implements UserEntityInterface
 {
+
 	/**
 	 * @var mixed
 	 */
@@ -27,4 +29,5 @@ class UserEntity implements UserEntityInterface
 	{
 		return $this->identifier;
 	}
+
 }

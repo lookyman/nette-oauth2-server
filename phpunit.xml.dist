@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./tests/bootstrap.php" verbose="true">
+<phpunit forceCoversAnnotation="true" mapTestClassNameToCoveredClassName="true" verbose="true" colors="true">
     <testsuites>
-        <testsuite name="Lookyman/NetteOAuth2Server">
+        <testsuite name="Lookyman/Nette/OAuth2/Server">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
             <directory>./src</directory>
         </whitelist>
     </filter>

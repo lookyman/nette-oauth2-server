@@ -1,19 +1,14 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\UI;
+declare(strict_types = 1);
 
-use Lookyman\NetteOAuth2Server\Psr7\ApplicationPsr7ResponseInterface;
-use Lookyman\NetteOAuth2Server\RedirectConfig;
-use Lookyman\NetteOAuth2Server\Storage\IAuthorizationRequestSerializer;
-use Lookyman\NetteOAuth2Server\User\UserEntity;
-use Nette\Application\AbortException;
-use Nette\Application\BadRequestException;
+namespace Lookyman\Nette\OAuth2\Server\UI;
+
+use Lookyman\Nette\OAuth2\Server\Psr7\ApplicationPsr7ResponseInterface;
+use Lookyman\Nette\OAuth2\Server\Storage\IAuthorizationRequestSerializer;
+use Lookyman\Nette\OAuth2\Server\User\UserEntity;
 use Nette\Application\IResponse;
 use Nette\Http\IResponse as HttpResponse;
-use Nette\Http\Session;
-use Nette\Http\SessionSection;
-use Nette\Security\User;
 use Nextras\Application\UI\SecuredLinksPresenterTrait;
 
 trait ApprovePresenterTrait
@@ -33,20 +28,15 @@ trait ApprovePresenterTrait
 	public $authorizationRequestSerializer;
 
 	/**
-	 * @var RedirectConfig
+	 * @var RedirectService
 	 * @inject
 	 */
-	public $redirectConfig;
+	public $redirectService;
 
-	/**
-	 * @return ApproveControl
-	 * @throws AbortException
-	 * @throws BadRequestException
-	 */
 	protected function createComponentApprove(): ApproveControl
 	{
 		if (!$this->getUser()->isLoggedIn()) {
-			$this->redirect(...$this->redirectConfig->getLoginDestination());
+			$this->redirectService->redirectToLoginDestination($this);
 		}
 
 		/** @var string $data */
@@ -68,34 +58,17 @@ trait ApprovePresenterTrait
 	}
 
 	/**
-	 * @param string|null $message
-	 * @param int $code
-	 * @throws BadRequestException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
 	abstract public function error($message = null, $code = HttpResponse::S404_NOT_FOUND);
 
 	/**
-	 * @param string|null $namespace
-	 * @return Session|SessionSection
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
 	abstract public function getSession($namespace = null);
 
-	/**
-	 * @return User
-	 */
 	abstract public function getUser();
 
-	/**
-	 * @param int $code [optional]
-	 * @param string|null $destination
-	 * @param array|mixed $args
-	 * @throws AbortException
-	 */
-	abstract public function redirect($code, $destination = null, $args = []);
-
-	/**
-	 * @param IResponse $response
-	 * @throws AbortException
-	 */
 	abstract public function sendResponse(IResponse $response);
+
 }

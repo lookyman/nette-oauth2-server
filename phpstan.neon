@@ -1,0 +1,8 @@
+includes:
+	- vendor/phpstan/phpstan-nette/extension.neon
+	- vendor/phpstan/phpstan-nette/rules.neon
+
+parameters:
+	ignoreErrors:
+		- '#, PHPUnit_Framework_MockObject_MockObject given#'
+		- '#does not accept PHPUnit_Framework_MockObject_MockObject#'

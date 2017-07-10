@@ -1,20 +1,25 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\Tests;
+declare(strict_types = 1);
 
-use Lookyman\NetteOAuth2Server\Psr7\Response;
+namespace Lookyman\Nette\OAuth2\Server\Psr7;
+
 use Nette\Http\IRequest;
 use Nette\Http\IResponse;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Zend\Diactoros\Stream;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+/**
+ * @covers \Lookyman\Nette\OAuth2\Server\Psr7\Response
+ */
+final class ResponseTest extends TestCase
 {
+
 	public function testSend()
 	{
-		$httpRequest = $this->getMockBuilder(IRequest::class)->getMock();
-		$httpResponse = $this->getMockBuilder(IResponse::class)->getMock();
+		$httpRequest = $this->createMock(IRequest::class);
+		$httpResponse = $this->createMock(IResponse::class);
 		$httpResponse->expects(self::once())->method('setCode')->with(500);
 		$httpResponse->expects(self::once())->method('setHeader')->with('header', 'value');
 		$body = new Stream('php://temp', 'r+');
@@ -57,7 +62,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
 	public function testWithBody()
 	{
-		$body = $this->getMockBuilder(StreamInterface::class)->getMock();
+		$body = $this->createMock(StreamInterface::class);
 		$response = new Response();
 		$modified = $response->withBody($body);
 		self::assertInstanceOf(Response::class, $modified);
@@ -97,4 +102,5 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 			['getReasonPhrase', []],
 		];
 	}
+
 }

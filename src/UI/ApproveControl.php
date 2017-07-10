@@ -1,11 +1,13 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\UI;
+declare(strict_types = 1);
+
+namespace Lookyman\Nette\OAuth2\Server\UI;
 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
+use Lookyman\Nette\OAuth2\Server\Psr7\ApplicationPsr7ResponseInterface;
 use Nette\Application\AbortException;
 use Nette\Application\IResponse;
 use Nette\Application\UI\Control;
@@ -18,7 +20,7 @@ use Psr\Log\LoggerAwareTrait;
 /**
  * @method void onResponse(IResponse $response)
  */
-class ApproveControl extends Control implements LoggerAwareInterface
+final class ApproveControl extends Control implements LoggerAwareInterface
 {
 	use LoggerAwareTrait;
 	use Psr7Trait;
@@ -49,13 +51,9 @@ class ApproveControl extends Control implements LoggerAwareInterface
 	 */
 	private $templateFile;
 
-	/**
-	 * @param AuthorizationServer $authorizationServer
-	 * @param Session $session
-	 * @param AuthorizationRequest $authorizationRequest
-	 */
 	public function __construct(AuthorizationServer $authorizationServer, Session $session, AuthorizationRequest $authorizationRequest)
 	{
+		parent::__construct();
 		$this->authorizationServer = $authorizationServer;
 		$this->session = $session;
 		$this->authorizationRequest = $authorizationRequest;
@@ -93,15 +91,19 @@ class ApproveControl extends Control implements LoggerAwareInterface
 
 		$response = $this->createResponse();
 		try {
-			$this->onResponse($this->authorizationServer->completeAuthorizationRequest($this->authorizationRequest, $response));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $this->authorizationServer->completeAuthorizationRequest($this->authorizationRequest, $response);
+			$this->onResponse($response);
 
 		} catch (AbortException $e) {
 			throw $e;
 
 		} catch (OAuthServerException $e) {
-			$this->onResponse($e->generateHttpResponse($response));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $e->generateHttpResponse($response);
+			$this->onResponse($response);
 
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			if ($this->logger) {
 				$this->logger->error($e->getMessage(), ['exception' => $e]);
 			}
@@ -111,11 +113,9 @@ class ApproveControl extends Control implements LoggerAwareInterface
 		}
 	}
 
-	/**
-	 * @param string $file
-	 */
 	public function setTemplateFile(string $file)
 	{
 		$this->templateFile = $file;
 	}
+
 }

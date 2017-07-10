@@ -1,23 +1,29 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\Tests\User;
+declare(strict_types = 1);
+
+namespace Lookyman\Nette\OAuth2\Server\User;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use Lookyman\NetteOAuth2Server\User\UserEntity;
-use Lookyman\NetteOAuth2Server\User\UserRepository;
+use League\OAuth2\Server\Entities\UserEntityInterface;
 use Nette\Security\User;
+use PHPUnit\Framework\TestCase;
 
-class UserRepositoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * @covers \Lookyman\Nette\OAuth2\Server\User\UserRepository
+ */
+final class UserRepositoryTest extends TestCase
 {
+
 	public function testGetUserEntityByUserCredentials()
 	{
-		$client = $this->getMockBuilder(ClientEntityInterface::class)->getMock();
-		$user = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
+		$client = $this->createMock(ClientEntityInterface::class);
+		$user = $this->createMock(User::class);
 		$user->expects(self::once())->method('login')->with('name', 'passwd', 'grant', $client);
 		$user->expects(self::once())->method('isLoggedIn')->willReturn(true);
 		$user->expects(self::once())->method('getId')->willReturn('id');
 		$repository = new UserRepository($user);
+		/** @var UserEntityInterface $entity */
 		$entity = $repository->getUserEntityByUserCredentials('name', 'passwd', 'grant', $client);
 		self::assertInstanceOf(UserEntity::class, $entity);
 		self::assertEquals('id', $entity->getIdentifier());
@@ -25,8 +31,8 @@ class UserRepositoryTest extends \PHPUnit_Framework_TestCase
 
 	public function testGetUserEntityByUserCredentialsInvalidCredentials()
 	{
-		$client = $this->getMockBuilder(ClientEntityInterface::class)->getMock();
-		$user = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
+		$client = $this->createMock(ClientEntityInterface::class);
+		$user = $this->createMock(User::class);
 		$user->expects(self::once())->method('login')->with('name', 'passwd', 'grant', $client);
 		$user->expects(self::once())->method('isLoggedIn')->willReturn(false);
 		$repository = new UserRepository($user);
@@ -36,8 +42,8 @@ class UserRepositoryTest extends \PHPUnit_Framework_TestCase
 
 	public function testGetUserEntityByUserCredentialsException()
 	{
-		$client = $this->getMockBuilder(ClientEntityInterface::class)->getMock();
-		$user = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
+		$client = $this->createMock(ClientEntityInterface::class);
+		$user = $this->createMock(User::class);
 		$user->expects(self::once())->method('login')->with('name', 'passwd', 'grant', $client)->willThrowException(new \Exception());
 		$user->expects(self::once())->method('isLoggedIn')->willReturn(false);
 		$repository = new UserRepository($user);
@@ -47,8 +53,8 @@ class UserRepositoryTest extends \PHPUnit_Framework_TestCase
 
 	public function testCustomValidator()
 	{
-		$client = $this->getMockBuilder(ClientEntityInterface::class)->getMock();
-		$user = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
+		$client = $this->createMock(ClientEntityInterface::class);
+		$user = $this->createMock(User::class);
 		$temp = false;
 		$repository = new UserRepository($user, function ($username, $password, $grantType, $clientEntity) use ($client, &$temp) {
 			self::assertEquals('name', $username);
@@ -61,4 +67,5 @@ class UserRepositoryTest extends \PHPUnit_Framework_TestCase
 		self::assertTrue($temp);
 		self::assertNull($entity);
 	}
+
 }

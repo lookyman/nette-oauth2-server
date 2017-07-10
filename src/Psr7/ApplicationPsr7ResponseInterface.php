@@ -1,7 +1,8 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\Psr7;
+declare(strict_types = 1);
+
+namespace Lookyman\Nette\OAuth2\Server\Psr7;
 
 use Nette\Application\IResponse;
 use Psr\Http\Message\ResponseInterface;

@@ -1,4 +1,4 @@
-Lookyman/NetteOAuth2Server
+Lookyman/Nette/OAuth2/Server
 ==========================
 
 Integration of [The League of Extraordinary Packages](https://thephpleague.com/)' [OAuth 2.0 Server](https://oauth2.thephpleague.com/) into [Nette Framework](https://nette.org/) - base package.

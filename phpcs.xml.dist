@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Lookyman/Nette/OAuth2/Server">
+    <rule ref="vendor/lookyman/coding-standard/LookymanCodingStandard/ruleset-7.0.xml"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
+        <properties>
+            <property name="usefulAnnotations" type="array" value="@expectedException,@secured"/>
+        </properties>
+    </rule>
+</ruleset>

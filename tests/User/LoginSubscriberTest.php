@@ -1,45 +1,45 @@
 <?php
-declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\Tests\User;
+declare(strict_types = 1);
 
-use Lookyman\NetteOAuth2Server\RedirectConfig;
-use Lookyman\NetteOAuth2Server\UI\OAuth2Presenter;
-use Lookyman\NetteOAuth2Server\User\LoginSubscriber;
+namespace Lookyman\Nette\OAuth2\Server\User;
+
+use Lookyman\Nette\OAuth2\Server\UI\OAuth2Presenter;
+use Lookyman\Nette\OAuth2\Server\UI\RedirectService;
 use Nette\Application\Application;
 use Nette\Application\UI\Presenter;
 use Nette\Security\User;
+use PHPUnit\Framework\TestCase;
 
-class LoginSubscriberTest extends \PHPUnit_Framework_TestCase
+/**
+ * @covers \Lookyman\Nette\OAuth2\Server\User\LoginSubscriber
+ */
+final class LoginSubscriberTest extends TestCase
 {
+
 	public function testGetSubscribedEvents()
 	{
 		$subscriber = new LoginSubscriber(
-			$this->getMockBuilder(RedirectConfig::class)->disableOriginalConstructor()->getMock(),
+			new RedirectService(null, null),
 			10
 		);
 		self::assertEquals([
-			Application::class . '::onPresenter',
+			Application::class . '::onPresenter' => 'onPresenter',
 			User::class . '::onLoggedIn' => [
 				['onLoggedIn', 10],
-			]
+			],
 		], $subscriber->getSubscribedEvents());
 	}
 
 	public function testOnLoggedIn()
 	{
-		$redirectConfig = $this->getMockBuilder(RedirectConfig::class)->disableOriginalConstructor()->getMock();
-		$redirectConfig->expects(self::once())->method('getApproveDestination')->willReturn(['destination']);
-
-		$presenter = $this->getMockBuilder(Presenter::class)->disableOriginalConstructor()->getMock();
+		$presenter = $this->createMock(Presenter::class);
 		$presenter->expects(self::once())->method('getSession')->with(OAuth2Presenter::SESSION_NAMESPACE)->willReturn((object) ['authorizationRequest' => true]);
 		$presenter->expects(self::once())->method('redirect')->with('destination');
 
-		$user = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
-
-		$subscriber = new LoginSubscriber($redirectConfig);
-		$subscriber->onPresenter($this->getMockBuilder(Application::class)->disableOriginalConstructor()->getMock(), $presenter);
-		$subscriber->onLoggedIn($user);
+		$subscriber = new LoginSubscriber(new RedirectService('destination', null));
+		$subscriber->onPresenter($this->createMock(Application::class), $presenter);
+		$subscriber->onLoggedIn($this->createMock(User::class));
 	}
 
 	/**
@@ -47,11 +47,8 @@ class LoginSubscriberTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testOnLoggedInNoPresenter()
 	{
-		$redirectConfig = $this->getMockBuilder(RedirectConfig::class)->disableOriginalConstructor()->getMock();
-
-		$user = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
-
-		$subscriber = new LoginSubscriber($redirectConfig);
-		$subscriber->onLoggedIn($user);
+		$subscriber = new LoginSubscriber(new RedirectService(null, null));
+		$subscriber->onLoggedIn($this->createMock(User::class));
 	}
+
 }
