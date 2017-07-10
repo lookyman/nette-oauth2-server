@@ -28,4 +28,5 @@ trait Psr7Trait
 	{
 		return new Stream('php://temp', 'r+');
 	}
+
 }

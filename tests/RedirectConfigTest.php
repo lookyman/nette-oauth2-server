@@ -21,4 +21,5 @@ final class RedirectConfigTest extends TestCase
 	{
 		self::markTestIncomplete('todo');
 	}
+
 }

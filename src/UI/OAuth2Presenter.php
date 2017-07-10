@@ -113,4 +113,5 @@ final class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 			$this->sendResponse($response->withStatus(IResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body));
 		}
 	}
+
 }

@@ -67,4 +67,5 @@ final class UserRepositoryTest extends TestCase
 		self::assertTrue($temp);
 		self::assertNull($entity);
 	}
+
 }

@@ -61,4 +61,5 @@ final class LoginSubscriber implements Subscriber
 			],
 		];
 	}
+
 }

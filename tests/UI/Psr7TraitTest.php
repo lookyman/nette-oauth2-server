@@ -24,4 +24,5 @@ final class Psr7TraitTest extends TestCase
 		self::assertInstanceOf(ApplicationPsr7ResponseInterface::class, $class->response);
 		self::assertInstanceOf(StreamInterface::class, $class->stream);
 	}
+
 }

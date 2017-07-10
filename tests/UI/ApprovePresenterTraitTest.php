@@ -50,4 +50,5 @@ final class ApprovePresenterTraitTest extends TestCase
 		$presenter->authorizationRequestSerializer = $serializer;
 		$presenter->getApproveComponent();
 	}
+
 }

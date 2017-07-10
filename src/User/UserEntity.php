@@ -29,4 +29,5 @@ final class UserEntity implements UserEntityInterface
 	{
 		return $this->identifier;
 	}
+
 }

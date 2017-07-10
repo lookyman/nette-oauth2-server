@@ -17,4 +17,5 @@ final class UserEntityTest extends TestCase
 		$entity = new UserEntity('test');
 		self::assertEquals('test', $entity->getIdentifier());
 	}
+
 }

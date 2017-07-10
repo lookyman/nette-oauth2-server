@@ -25,4 +25,5 @@ final class ApproveControlFactoryTest extends TestCase
 		$factory->setLogger($this->createMock(LoggerInterface::class));
 		self::assertInstanceOf(ApproveControl::class, $factory->create(new AuthorizationRequest()));
 	}
+
 }

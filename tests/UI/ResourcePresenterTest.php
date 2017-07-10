@@ -119,4 +119,5 @@ final class ResourcePresenterTest extends TestCase
 		$this->expectOutputString('Unknown error');
 		$response->send($httpRequest, $httpResponse);
 	}
+
 }

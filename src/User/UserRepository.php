@@ -53,4 +53,5 @@ final class UserRepository implements UserRepositoryInterface
 	{
 		return call_user_func($this->credentialsValidator, $username, $password, $grantType, $clientEntity);
 	}
+
 }

@@ -50,4 +50,5 @@ final class LoginSubscriberTest extends TestCase
 		$subscriber = new LoginSubscriber(new RedirectConfig(null, null));
 		$subscriber->onLoggedIn($this->createMock(User::class));
 	}
+
 }

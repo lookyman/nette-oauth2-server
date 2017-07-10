@@ -76,4 +76,5 @@ trait ApprovePresenterTrait
 	abstract public function getUser();
 
 	abstract public function sendResponse(IResponse $response);
+
 }

@@ -34,4 +34,5 @@ final class Psr7TraitMock
 		$this->response = $this->createResponse();
 		$this->stream = $this->createStream();
 	}
+
 }

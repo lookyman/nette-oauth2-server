@@ -63,4 +63,5 @@ abstract class ResourcePresenter extends Presenter implements LoggerAwareInterfa
 
 		$this->onAuthorized($request);
 	}
+
 }

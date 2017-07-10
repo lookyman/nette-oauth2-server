@@ -4,6 +4,5 @@ includes:
 
 parameters:
 	ignoreErrors:
-		- '#::__construct\(\) does not call parent constructor from Nette\\ComponentModel\\Component#'
 		- '#, PHPUnit_Framework_MockObject_MockObject given#'
 		- '#does not accept PHPUnit_Framework_MockObject_MockObject#'

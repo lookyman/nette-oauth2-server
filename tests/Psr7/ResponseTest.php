@@ -102,4 +102,5 @@ final class ResponseTest extends TestCase
 			['getReasonPhrase', []],
 		];
 	}
+
 }

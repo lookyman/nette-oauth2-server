@@ -38,4 +38,5 @@ final class ApproveControlFactory implements IApproveControlFactory, LoggerAware
 		}
 		return $control;
 	}
+
 }

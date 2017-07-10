@@ -12,4 +12,5 @@ interface IAuthorizationRequestSerializer
 	public function serialize(AuthorizationRequest $authorizationRequest): string;
 
 	public function unserialize(string $data): AuthorizationRequest;
+
 }

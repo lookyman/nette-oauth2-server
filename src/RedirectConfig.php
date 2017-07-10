@@ -79,4 +79,5 @@ final class RedirectConfig
 		$this->onBeforeLoginRedirect($this);
 		$component->redirect(...$this->loginDestination);
 	}
+
 }

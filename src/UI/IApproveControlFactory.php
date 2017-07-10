@@ -10,4 +10,5 @@ interface IApproveControlFactory
 {
 
 	public function create(AuthorizationRequest $authorizationRequest): ApproveControl;
+
 }

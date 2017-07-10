@@ -29,4 +29,5 @@ final class ResourcePresenterMock extends ResourcePresenter
 	{
 		$this->terminate();
 	}
+
 }

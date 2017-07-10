@@ -16,4 +16,5 @@ final class ApprovePresenterMock extends Presenter
 	{
 		return $this['approve'];
 	}
+
 }

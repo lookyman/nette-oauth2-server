@@ -248,4 +248,5 @@ final class OAuth2PresenterTest extends TestCase
 		$this->expectOutputString('Unknown error');
 		$response->send($httpRequest, $httpResponse);
 	}
+
 }
