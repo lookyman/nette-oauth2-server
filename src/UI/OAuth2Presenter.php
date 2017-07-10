@@ -43,13 +43,16 @@ final class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 
 	public function actionAccessToken()
 	{
+		$response = $this->createResponse();
+
 		if (!$this->getHttpRequest()->isMethod(IRequest::POST)) {
 			$body = $this->createStream();
 			$body->write('Method not allowed');
-			$this->sendResponse($this->createResponse()->withStatus(IResponse::S405_METHOD_NOT_ALLOWED)->withBody($body));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $response->withStatus(IResponse::S405_METHOD_NOT_ALLOWED)->withBody($body);
+			$this->sendResponse($response);
 		}
 
-		$response = $this->createResponse();
 		try {
 			/** @var ApplicationPsr7ResponseInterface $response */
 			$response = $this->authorizationServer->respondToAccessTokenRequest($this->createServerRequest(), $response);
@@ -69,19 +72,24 @@ final class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 			}
 			$body = $this->createStream();
 			$body->write('Unknown error');
-			$this->sendResponse($response->withStatus(IResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $response->withStatus(IResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body);
+			$this->sendResponse($response);
 		}
 	}
 
 	public function actionAuthorize()
 	{
+		$response = $this->createResponse();
+
 		if (!$this->getHttpRequest()->isMethod(IRequest::GET)) {
 			$body = $this->createStream();
 			$body->write('Method not allowed');
-			$this->sendResponse($this->createResponse()->withStatus(IResponse::S405_METHOD_NOT_ALLOWED)->withBody($body));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $response->withStatus(IResponse::S405_METHOD_NOT_ALLOWED)->withBody($body);
+			$this->sendResponse($response);
 		}
 
-		$response = $this->createResponse();
 		try {
 			$this->getSession(self::SESSION_NAMESPACE)->authorizationRequest = $this->authorizationRequestSerializer->serialize(
 				$this->authorizationServer->validateAuthorizationRequest($this->createServerRequest())
@@ -105,7 +113,9 @@ final class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 			}
 			$body = $this->createStream();
 			$body->write('Unknown error');
-			$this->sendResponse($response->withStatus(IResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $response->withStatus(IResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body);
+			$this->sendResponse($response);
 		}
 	}
 

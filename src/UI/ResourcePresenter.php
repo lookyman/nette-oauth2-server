@@ -58,7 +58,9 @@ abstract class ResourcePresenter extends Presenter implements LoggerAwareInterfa
 			}
 			$body = $this->createStream();
 			$body->write('Unknown error');
-			$this->sendResponse($response->withStatus(IResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $response->withStatus(IResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body);
+			$this->sendResponse($response);
 		}
 
 		$this->onAuthorized($request);
