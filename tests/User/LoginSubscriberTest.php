@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Lookyman\Nette\OAuth2\Server\User;
 
-use Lookyman\Nette\OAuth2\Server\RedirectConfig;
 use Lookyman\Nette\OAuth2\Server\UI\OAuth2Presenter;
+use Lookyman\Nette\OAuth2\Server\UI\RedirectService;
 use Nette\Application\Application;
 use Nette\Application\UI\Presenter;
 use Nette\Security\User;
@@ -20,7 +20,7 @@ final class LoginSubscriberTest extends TestCase
 	public function testGetSubscribedEvents()
 	{
 		$subscriber = new LoginSubscriber(
-			new RedirectConfig(null, null),
+			new RedirectService(null, null),
 			10
 		);
 		self::assertEquals([
@@ -37,7 +37,7 @@ final class LoginSubscriberTest extends TestCase
 		$presenter->expects(self::once())->method('getSession')->with(OAuth2Presenter::SESSION_NAMESPACE)->willReturn((object) ['authorizationRequest' => true]);
 		$presenter->expects(self::once())->method('redirect')->with('destination');
 
-		$subscriber = new LoginSubscriber(new RedirectConfig('destination', null));
+		$subscriber = new LoginSubscriber(new RedirectService('destination', null));
 		$subscriber->onPresenter($this->createMock(Application::class), $presenter);
 		$subscriber->onLoggedIn($this->createMock(User::class));
 	}
@@ -47,7 +47,7 @@ final class LoginSubscriberTest extends TestCase
 	 */
 	public function testOnLoggedInNoPresenter()
 	{
-		$subscriber = new LoginSubscriber(new RedirectConfig(null, null));
+		$subscriber = new LoginSubscriber(new RedirectService(null, null));
 		$subscriber->onLoggedIn($this->createMock(User::class));
 	}
 

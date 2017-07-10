@@ -2,14 +2,14 @@
 
 declare(strict_types = 1);
 
-namespace Lookyman\Nette\OAuth2\Server;
+namespace Lookyman\Nette\OAuth2\Server\UI;
 
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Lookyman\Nette\OAuth2\Server\RedirectConfig
+ * @covers \Lookyman\Nette\OAuth2\Server\UI\RedirectService
  */
-final class RedirectConfigTest extends TestCase
+final class RedirectServiceTest extends TestCase
 {
 
 	public function testGet()

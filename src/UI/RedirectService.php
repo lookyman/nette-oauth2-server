@@ -2,17 +2,17 @@
 
 declare(strict_types = 1);
 
-namespace Lookyman\Nette\OAuth2\Server;
+namespace Lookyman\Nette\OAuth2\Server\UI;
 
 use Nette\Application\UI\Component;
 use Nette\InvalidStateException;
 use Nette\SmartObject;
 
 /**
- * @method void onBeforeApproveRedirect(RedirectConfig $redirectConfig)
- * @method void onBeforeLoginRedirect(RedirectConfig $redirectConfig)
+ * @method void onBeforeApproveRedirect(RedirectService $redirectConfig)
+ * @method void onBeforeLoginRedirect(RedirectService $redirectConfig)
  */
-final class RedirectConfig
+final class RedirectService
 {
 	use SmartObject;
 

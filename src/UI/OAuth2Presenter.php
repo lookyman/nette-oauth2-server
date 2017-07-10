@@ -7,7 +7,6 @@ namespace Lookyman\Nette\OAuth2\Server\UI;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Lookyman\Nette\OAuth2\Server\Psr7\ApplicationPsr7ResponseInterface;
-use Lookyman\Nette\OAuth2\Server\RedirectConfig;
 use Lookyman\Nette\OAuth2\Server\Storage\IAuthorizationRequestSerializer;
 use Nette\Application\AbortException;
 use Nette\Application\UI\Presenter;
@@ -36,10 +35,10 @@ final class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 	public $authorizationServer;
 
 	/**
-	 * @var RedirectConfig
+	 * @var RedirectService
 	 * @inject
 	 */
-	public $redirectConfig;
+	public $redirectService;
 
 	public function actionAccessToken()
 	{
@@ -95,9 +94,9 @@ final class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 				$this->authorizationServer->validateAuthorizationRequest($this->createServerRequest())
 			);
 			if (!$this->getUser()->isLoggedIn()) {
-				$this->redirectConfig->redirectToLoginDestination($this);
+				$this->redirectService->redirectToLoginDestination($this);
 			}
-			$this->redirectConfig->redirectToApproveDestination($this);
+			$this->redirectService->redirectToApproveDestination($this);
 
 		} catch (AbortException $e) {
 			throw $e;

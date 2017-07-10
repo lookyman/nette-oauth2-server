@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Lookyman\Nette\OAuth2\Server\UI;
 
 use Lookyman\Nette\OAuth2\Server\Psr7\ApplicationPsr7ResponseInterface;
-use Lookyman\Nette\OAuth2\Server\RedirectConfig;
 use Lookyman\Nette\OAuth2\Server\Storage\IAuthorizationRequestSerializer;
 use Lookyman\Nette\OAuth2\Server\User\UserEntity;
 use Nette\Application\IResponse;
@@ -29,15 +28,15 @@ trait ApprovePresenterTrait
 	public $authorizationRequestSerializer;
 
 	/**
-	 * @var RedirectConfig
+	 * @var RedirectService
 	 * @inject
 	 */
-	public $redirectConfig;
+	public $redirectService;
 
 	protected function createComponentApprove(): ApproveControl
 	{
 		if (!$this->getUser()->isLoggedIn()) {
-			$this->redirectConfig->redirectToLoginDestination($this);
+			$this->redirectService->redirectToLoginDestination($this);
 		}
 
 		/** @var string $data */

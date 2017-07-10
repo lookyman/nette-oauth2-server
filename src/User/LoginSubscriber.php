@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace Lookyman\Nette\OAuth2\Server\User;
 
 use Kdyby\Events\Subscriber;
-use Lookyman\Nette\OAuth2\Server\RedirectConfig;
 use Lookyman\Nette\OAuth2\Server\UI\OAuth2Presenter;
+use Lookyman\Nette\OAuth2\Server\UI\RedirectService;
 use Nette\Application\Application;
 use Nette\Application\IPresenter;
 use Nette\Application\UI\Presenter;
@@ -27,13 +27,13 @@ final class LoginSubscriber implements Subscriber
 	private $priority;
 
 	/**
-	 * @var RedirectConfig
+	 * @var \Lookyman\Nette\OAuth2\Server\UI\RedirectService
 	 */
-	private $redirectConfig;
+	private $redirectService;
 
-	public function __construct(RedirectConfig $redirectConfig, int $priority = 0)
+	public function __construct(RedirectService $redirectConfig, int $priority = 0)
 	{
-		$this->redirectConfig = $redirectConfig;
+		$this->redirectService = $redirectConfig;
 		$this->priority = $priority;
 	}
 
@@ -48,7 +48,7 @@ final class LoginSubscriber implements Subscriber
 			throw new InvalidStateException('Presenter not set');
 		}
 		if ($this->presenter instanceof Presenter && $this->presenter->getSession(OAuth2Presenter::SESSION_NAMESPACE)->authorizationRequest) {
-			$this->redirectConfig->redirectToApproveDestination($this->presenter);
+			$this->redirectService->redirectToApproveDestination($this->presenter);
 		}
 	}
 
