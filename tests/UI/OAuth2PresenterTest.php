@@ -146,14 +146,8 @@ final class OAuth2PresenterTest extends TestCase
 		$presenter = new OAuth2Presenter();
 		$presenter->injectPrimary(null, null, null, $httpRequest, $httpResponse);
 
-		$redirectEventTriggered = false;
-		$presenter->onBeforeRedirect[] = function () use (&$redirectEventTriggered) {
-			$redirectEventTriggered = true;
-		};
-
 		$response = $presenter->run(new Request('', null, ['action' => 'authorize']));
 		self::assertInstanceOf(Response::class, $response);
-		self::assertFalse($redirectEventTriggered);
 		$this->expectOutputString('Method not allowed');
 		$response->send($httpRequest, $httpResponse);
 	}
@@ -174,14 +168,8 @@ final class OAuth2PresenterTest extends TestCase
 		$presenter->authorizationRequestSerializer = $this->createMock(IAuthorizationRequestSerializer::class);
 		$presenter->authorizationServer = $authorizationServer;
 
-		$redirectEventTriggered = false;
-		$presenter->onBeforeRedirect[] = function () use (&$redirectEventTriggered) {
-			$redirectEventTriggered = true;
-		};
-
 		$response = $presenter->run(new Request('', null, ['action' => 'authorize']));
 		self::assertInstanceOf(Response::class, $response);
-		self::assertFalse($redirectEventTriggered);
 		ob_start();
 		$response->send($httpRequest, $httpResponse);
 		ob_end_clean();
@@ -203,14 +191,8 @@ final class OAuth2PresenterTest extends TestCase
 		$presenter->authorizationRequestSerializer = $this->createMock(IAuthorizationRequestSerializer::class);
 		$presenter->authorizationServer = $authorizationServer;
 
-		$redirectEventTriggered = false;
-		$presenter->onBeforeRedirect[] = function () use (&$redirectEventTriggered) {
-			$redirectEventTriggered = true;
-		};
-
 		$response = $presenter->run(new Request('', null, ['action' => 'authorize']));
 		self::assertInstanceOf(Response::class, $response);
-		self::assertFalse($redirectEventTriggered);
 		$this->expectOutputString('Unknown error');
 		$response->send($httpRequest, $httpResponse);
 	}
@@ -237,14 +219,8 @@ final class OAuth2PresenterTest extends TestCase
 		$presenter->authorizationServer = $authorizationServer;
 		$presenter->setLogger($logger);
 
-		$redirectEventTriggered = false;
-		$presenter->onBeforeRedirect[] = function () use (&$redirectEventTriggered) {
-			$redirectEventTriggered = true;
-		};
-
 		$response = $presenter->run(new Request('', null, ['action' => 'authorize']));
 		self::assertInstanceOf(Response::class, $response);
-		self::assertFalse($redirectEventTriggered);
 		$this->expectOutputString('Unknown error');
 		$response->send($httpRequest, $httpResponse);
 	}

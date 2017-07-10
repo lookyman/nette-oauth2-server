@@ -17,11 +17,6 @@ trait ApprovePresenterTrait
 	use SecuredLinksPresenterTrait;
 
 	/**
-	 * @var callable[]
-	 */
-	public $onBeforeRedirect = [];
-
-	/**
 	 * @var IApproveControlFactory
 	 * @inject
 	 */

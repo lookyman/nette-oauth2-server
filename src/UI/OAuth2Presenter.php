@@ -24,11 +24,6 @@ final class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 	const SESSION_NAMESPACE = 'nette-oauth2-server';
 
 	/**
-	 * @var callable[]
-	 */
-	public $onBeforeRedirect = [];
-
-	/**
 	 * @var IAuthorizationRequestSerializer
 	 * @inject
 	 */
