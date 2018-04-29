@@ -5,6 +5,7 @@ namespace Lookyman\NetteOAuth2Server\UI;
 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use Lookyman\NetteOAuth2Server\Psr7\ApplicationPsr7ResponseInterface;
 use Lookyman\NetteOAuth2Server\RedirectConfig;
 use Lookyman\NetteOAuth2Server\Storage\IAuthorizationRequestSerializer;
 use Nette\Application\AbortException;
@@ -16,10 +17,11 @@ use Psr\Log\LoggerAwareTrait;
 
 class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 {
+
 	use LoggerAwareTrait;
 	use Psr7Trait;
 
-	const SESSION_NAMESPACE = 'nette-oauth2-server';
+	public const SESSION_NAMESPACE = 'nette-oauth2-server';
 
 	/**
 	 * @var IAuthorizationRequestSerializer
@@ -39,10 +41,7 @@ class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 	 */
 	public $redirectConfig;
 
-	/**
-	 * @throws AbortException
-	 */
-	public function actionAccessToken()
+	public function actionAccessToken(): void
 	{
 		if (!$this->getHttpRequest()->isMethod(IRequest::POST)) {
 			$body = $this->createStream();
@@ -52,15 +51,19 @@ class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 
 		$response = $this->createResponse();
 		try {
-			$this->sendResponse($this->authorizationServer->respondToAccessTokenRequest($this->createServerRequest(), $response));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $this->authorizationServer->respondToAccessTokenRequest($this->createServerRequest(), $response);
+			$this->sendResponse($response);
 
 		} catch (AbortException $e) {
 			throw $e;
 
 		} catch (OAuthServerException $e) {
-			$this->sendResponse($e->generateHttpResponse($response));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $e->generateHttpResponse($response);
+			$this->sendResponse($response);
 
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			if ($this->logger) {
 				$this->logger->error($e->getMessage(), ['exception' => $e]);
 			}
@@ -70,10 +73,7 @@ class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 		}
 	}
 
-	/**
-	 * @throws AbortException
-	 */
-	public function actionAuthorize()
+	public function actionAuthorize(): void
 	{
 		if (!$this->getHttpRequest()->isMethod(IRequest::GET)) {
 			$body = $this->createStream();
@@ -95,9 +95,11 @@ class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 			throw $e;
 
 		} catch (OAuthServerException $e) {
-			$this->sendResponse($e->generateHttpResponse($response));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $e->generateHttpResponse($response);
+			$this->sendResponse($response);
 
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			if ($this->logger) {
 				$this->logger->error($e->getMessage(), ['exception' => $e]);
 			}
@@ -106,4 +108,5 @@ class OAuth2Presenter extends Presenter implements LoggerAwareInterface
 			$this->sendResponse($response->withStatus(IResponse::S500_INTERNAL_SERVER_ERROR)->withBody($body));
 		}
 	}
+
 }

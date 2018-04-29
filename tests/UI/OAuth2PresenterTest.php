@@ -18,11 +18,13 @@ use Nette\Http\IRequest as HttpRequest;
 use Nette\Http\IResponse as HttpResponse;
 use Nette\Http\Session;
 use Nette\Security\User;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
+class OAuth2PresenterTest extends TestCase
 {
-	public function testActionAccessToken()
+
+	public function testActionAccessToken(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::POST)->willReturn(true);
@@ -39,7 +41,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		self::assertSame($response, $presenter->run(new Request('', null, ['action' => 'accessToken'])));
 	}
 
-	public function testActionAccessTokenWrongMethod()
+	public function testActionAccessTokenWrongMethod(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::POST)->willReturn(false);
@@ -56,7 +58,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		$response->send($httpRequest, $httpResponse);
 	}
 
-	public function testActionAccessTokenOAuthException()
+	public function testActionAccessTokenOAuthException(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::POST)->willReturn(true);
@@ -78,7 +80,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		ob_end_clean();
 	}
 
-	public function testActionAccessTokenException()
+	public function testActionAccessTokenException(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::POST)->willReturn(true);
@@ -99,7 +101,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		$response->send($httpRequest, $httpResponse);
 	}
 
-	public function testActionAccessTokenExceptionWithLogger()
+	public function testActionAccessTokenExceptionWithLogger(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::POST)->willReturn(true);
@@ -125,7 +127,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		$response->send($httpRequest, $httpResponse);
 	}
 
-	public function testActionAuthorizeUnlogged()
+	public function testActionAuthorizeUnlogged(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::GET)->willReturn(true);
@@ -145,7 +147,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 
 		$config = new RedirectConfig('foo', 'bar');
 
-		$presenter = new OAuth2PresenterMock(function ($destination) {
+		$presenter = new OAuth2PresenterMock(function ($destination): void {
 			self::assertEquals('bar', $destination);
 		});
 		$presenter->injectPrimary(null, null, null, $httpRequest, $httpResponse, $session, $user);
@@ -157,7 +159,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		self::assertInstanceOf(RedirectResponse::class, $response);
 	}
 
-	public function testActionAuthorizeLogged()
+	public function testActionAuthorizeLogged(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::GET)->willReturn(true);
@@ -177,7 +179,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 
 		$config = new RedirectConfig('foo', 'bar');
 
-		$presenter = new OAuth2PresenterMock(function ($destination) {
+		$presenter = new OAuth2PresenterMock(function ($destination): void {
 			self::assertEquals('foo', $destination);
 		});
 		$presenter->injectPrimary(null, null, null, $httpRequest, $httpResponse, $session, $user);
@@ -189,7 +191,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		self::assertInstanceOf(RedirectResponse::class, $response);
 	}
 
-	public function testActionAuthorizeWrongMethod()
+	public function testActionAuthorizeWrongMethod(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::GET)->willReturn(false);
@@ -206,7 +208,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		$response->send($httpRequest, $httpResponse);
 	}
 
-	public function testActionAuthorizeOAuthException()
+	public function testActionAuthorizeOAuthException(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::GET)->willReturn(true);
@@ -229,7 +231,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		ob_end_clean();
 	}
 
-	public function testActionAuthorizeException()
+	public function testActionAuthorizeException(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::GET)->willReturn(true);
@@ -251,7 +253,7 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		$response->send($httpRequest, $httpResponse);
 	}
 
-	public function testActionAuthorizeExceptionWithLogger()
+	public function testActionAuthorizeExceptionWithLogger(): void
 	{
 		$httpRequest = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->getMock();
 		$httpRequest->expects(self::once())->method('isMethod')->with(HttpRequest::GET)->willReturn(true);
@@ -278,4 +280,5 @@ class OAuth2PresenterTest extends \PHPUnit_Framework_TestCase
 		$this->expectOutputString('Unknown error');
 		$response->send($httpRequest, $httpResponse);
 	}
+
 }

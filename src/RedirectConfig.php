@@ -7,6 +7,7 @@ use Nette\InvalidStateException;
 
 class RedirectConfig
 {
+
 	/**
 	 * @var array
 	 */
@@ -29,7 +30,6 @@ class RedirectConfig
 
 	/**
 	 * @return array
-	 * @throws InvalidStateException
 	 */
 	public function getApproveDestination(): array
 	{
@@ -41,7 +41,6 @@ class RedirectConfig
 
 	/**
 	 * @return array
-	 * @throws InvalidStateException
 	 */
 	public function getLoginDestination(): array
 	{
@@ -50,4 +49,5 @@ class RedirectConfig
 		}
 		return $this->loginDestination;
 	}
+
 }

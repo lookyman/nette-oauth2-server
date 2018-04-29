@@ -5,7 +5,7 @@ namespace Lookyman\NetteOAuth2Server\UI;
 
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\ResourceServer;
-use Nette\Application\AbortException;
+use Lookyman\NetteOAuth2Server\Psr7\ApplicationPsr7ResponseInterface;
 use Nette\Application\UI\ComponentReflection;
 use Nette\Application\UI\Presenter;
 use Nette\Http\IResponse;
@@ -18,6 +18,7 @@ use Psr\Log\LoggerAwareTrait;
  */
 abstract class ResourcePresenter extends Presenter implements LoggerAwareInterface
 {
+
 	use LoggerAwareTrait;
 	use Psr7Trait;
 
@@ -34,9 +35,8 @@ abstract class ResourcePresenter extends Presenter implements LoggerAwareInterfa
 
 	/**
 	 * @param mixed $element
-	 * @throws AbortException
 	 */
-	final public function checkRequirements($element)
+	final public function checkRequirements($element): void
 	{
 		if (!$element instanceof ComponentReflection) {
 			return;
@@ -48,9 +48,11 @@ abstract class ResourcePresenter extends Presenter implements LoggerAwareInterfa
 			$request = $this->resourceServer->validateAuthenticatedRequest($request);
 
 		} catch (OAuthServerException $e) {
-			$this->sendResponse($e->generateHttpResponse($response));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $e->generateHttpResponse($response);
+			$this->sendResponse($response);
 
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			if ($this->logger) {
 				$this->logger->error($e->getMessage(), ['exception' => $e]);
 			}
@@ -61,4 +63,5 @@ abstract class ResourcePresenter extends Presenter implements LoggerAwareInterfa
 
 		$this->onAuthorized($request);
 	}
+
 }

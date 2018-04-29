@@ -7,8 +7,6 @@ use Lookyman\NetteOAuth2Server\Psr7\ApplicationPsr7ResponseInterface;
 use Lookyman\NetteOAuth2Server\RedirectConfig;
 use Lookyman\NetteOAuth2Server\Storage\IAuthorizationRequestSerializer;
 use Lookyman\NetteOAuth2Server\User\UserEntity;
-use Nette\Application\AbortException;
-use Nette\Application\BadRequestException;
 use Nette\Application\IResponse;
 use Nette\Http\IResponse as HttpResponse;
 use Nette\Http\Session;
@@ -18,6 +16,7 @@ use Nextras\Application\UI\SecuredLinksPresenterTrait;
 
 trait ApprovePresenterTrait
 {
+
 	use SecuredLinksPresenterTrait;
 
 	/**
@@ -38,11 +37,6 @@ trait ApprovePresenterTrait
 	 */
 	public $redirectConfig;
 
-	/**
-	 * @return ApproveControl
-	 * @throws AbortException
-	 * @throws BadRequestException
-	 */
 	protected function createComponentApprove(): ApproveControl
 	{
 		if (!$this->getUser()->isLoggedIn()) {
@@ -58,7 +52,7 @@ trait ApprovePresenterTrait
 				$authorizationRequest->setUser(new UserEntity($this->getUser()->getId()));
 			}
 			$control = $this->approveControlFactory->create($authorizationRequest);
-			$control->onResponse[] = function (ApplicationPsr7ResponseInterface $response) {
+			$control->onResponse[] = function (ApplicationPsr7ResponseInterface $response): void {
 				$this->sendResponse($response);
 			};
 			return $control;
@@ -70,18 +64,21 @@ trait ApprovePresenterTrait
 	/**
 	 * @param string|null $message
 	 * @param int $code
-	 * @throws BadRequestException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	abstract public function error($message = null, $code = HttpResponse::S404_NOT_FOUND);
 
 	/**
 	 * @param string|null $namespace
 	 * @return Session|SessionSection
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
 	abstract public function getSession($namespace = null);
 
 	/**
 	 * @return User
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	abstract public function getUser();
 
@@ -89,13 +86,15 @@ trait ApprovePresenterTrait
 	 * @param int $code [optional]
 	 * @param string|null $destination
 	 * @param array|mixed $args
-	 * @throws AbortException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	abstract public function redirect($code, $destination = null, $args = []);
 
 	/**
-	 * @param IResponse $response
-	 * @throws AbortException
+	 * @return void
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	abstract public function sendResponse(IResponse $response);
+
 }

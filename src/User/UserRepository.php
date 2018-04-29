@@ -10,6 +10,7 @@ use Nette\Security\User;
 
 class UserRepository implements UserRepositoryInterface
 {
+
 	/**
 	 * @var User
 	 */
@@ -20,11 +21,7 @@ class UserRepository implements UserRepositoryInterface
 	 */
 	private $credentialsValidator;
 
-	/**
-	 * @param User $user
-	 * @param callable|null $credentialsValidator
-	 */
-	public function __construct(User $user, callable $credentialsValidator = null)
+	public function __construct(User $user, ?callable $credentialsValidator = null)
 	{
 		$this->user = $user;
 		$this->credentialsValidator = $credentialsValidator ?: function () {
@@ -32,7 +29,9 @@ class UserRepository implements UserRepositoryInterface
 			try {
 				$this->user->login(...func_get_args());
 
-			} catch (\Exception $e) {} // Fail silently
+			} catch (\Throwable $e) {
+				// Fail silently
+			}
 
 			return $this->user->isLoggedIn() ? new UserEntity($this->user->getId()) : null;
 		};
@@ -42,16 +41,15 @@ class UserRepository implements UserRepositoryInterface
 	 * @param string $username
 	 * @param string $password
 	 * @param string $grantType
-	 * @param ClientEntityInterface $clientEntity
-	 * @return UserEntityInterface|null
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
 	public function getUserEntityByUserCredentials(
 		$username,
 		$password,
 		$grantType,
 		ClientEntityInterface $clientEntity
-	)
-	{
+	): ?UserEntityInterface {
 		return call_user_func($this->credentialsValidator, $username, $password, $grantType, $clientEntity);
 	}
+
 }

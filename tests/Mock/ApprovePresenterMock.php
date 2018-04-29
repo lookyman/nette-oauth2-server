@@ -9,10 +9,12 @@ use Nette\Application\UI\Presenter;
 
 class ApprovePresenterMock extends Presenter
 {
+
 	use ApprovePresenterTrait;
 
 	public function getApproveComponent(): ApproveControl
 	{
 		return $this['approve'];
 	}
+
 }

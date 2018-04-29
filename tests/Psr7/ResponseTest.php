@@ -1,20 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace Lookyman\NetteOAuth2Server\Tests;
+namespace Lookyman\NetteOAuth2Server\Tests\Psr7;
 
 use Lookyman\NetteOAuth2Server\Psr7\Response;
 use Nette\Http\IRequest;
 use Nette\Http\IResponse;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Zend\Diactoros\Stream;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends TestCase
 {
-	public function testSend()
+
+	public function testSend(): void
 	{
-		$httpRequest = $this->getMockBuilder(IRequest::class)->getMock();
-		$httpResponse = $this->getMockBuilder(IResponse::class)->getMock();
+		$httpRequest = $this->createMock(IRequest::class);
+		$httpResponse = $this->createMock(IResponse::class);
 		$httpResponse->expects(self::once())->method('setCode')->with(500);
 		$httpResponse->expects(self::once())->method('setHeader')->with('header', 'value');
 		$body = new Stream('php://temp', 'r+');
@@ -24,7 +26,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 		$response->send($httpRequest, $httpResponse);
 	}
 
-	public function testWithHeader()
+	public function testWithHeader(): void
 	{
 		$response = new Response();
 		$modified = $response->withHeader('header', 'value');
@@ -36,7 +38,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 		self::assertEquals('value', $ref->getValue($modified)['header']);
 	}
 
-	public function testGetBody()
+	public function testGetBody(): void
 	{
 		$response = new Response();
 		$body = $response->getBody();
@@ -44,7 +46,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 		self::assertSame($body, $response->getBody());
 	}
 
-	public function testWithStatus()
+	public function testWithStatus(): void
 	{
 		$response = new Response();
 		$modified = $response->withStatus(500);
@@ -55,9 +57,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 		self::assertEquals(500, $ref->getValue($modified));
 	}
 
-	public function testWithBody()
+	public function testWithBody(): void
 	{
-		$body = $this->getMockBuilder(StreamInterface::class)->getMock();
+		$body = $this->createMock(StreamInterface::class);
 		$response = new Response();
 		$modified = $response->withBody($body);
 		self::assertInstanceOf(Response::class, $modified);
@@ -68,12 +70,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @param string $method
 	 * @param array $args
 	 * @dataProvider notImplementedProvider
 	 * @expectedException \Nette\NotImplementedException
 	 */
-	public function testNotImplemented(string $method, array $args)
+	public function testNotImplemented(string $method, array $args): void
 	{
 		$response = new Response();
 		call_user_func_array([$response, $method], $args);
@@ -97,4 +98,5 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 			['getReasonPhrase', []],
 		];
 	}
+
 }

@@ -11,6 +11,7 @@ use Psr\Log\LoggerAwareTrait;
 
 class ApproveControlFactory implements IApproveControlFactory, LoggerAwareInterface
 {
+
 	use LoggerAwareTrait;
 
 	/**
@@ -23,20 +24,12 @@ class ApproveControlFactory implements IApproveControlFactory, LoggerAwareInterf
 	 */
 	private $session;
 
-	/**
-	 * @param AuthorizationServer $authorizationServer
-	 * @param Session $session
-	 */
 	public function __construct(AuthorizationServer $authorizationServer, Session $session)
 	{
 		$this->authorizationServer = $authorizationServer;
 		$this->session = $session;
 	}
 
-	/**
-	 * @param AuthorizationRequest $authorizationRequest
-	 * @return ApproveControl
-	 */
 	public function create(AuthorizationRequest $authorizationRequest): ApproveControl
 	{
 		$control = new ApproveControl($this->authorizationServer, $this->session, $authorizationRequest);
@@ -45,4 +38,5 @@ class ApproveControlFactory implements IApproveControlFactory, LoggerAwareInterf
 		}
 		return $control;
 	}
+
 }

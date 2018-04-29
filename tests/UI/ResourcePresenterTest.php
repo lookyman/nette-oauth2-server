@@ -10,19 +10,22 @@ use Lookyman\NetteOAuth2Server\Tests\Mock\ResourcePresenterMock;
 use Nette\Application\Request;
 use Nette\Http\IRequest;
 use Nette\Http\IResponse;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Zend\Diactoros\ServerRequest;
 
-class ResourcePresenterTest extends \PHPUnit_Framework_TestCase
+class ResourcePresenterTest extends TestCase
 {
+
 	/**
-	 * @var IRequest
+	 * @var IRequest|MockObject
 	 */
 	private $httpRequest;
 
 	/**
-	 * @var IResponse
+	 * @var IResponse|MockObject
 	 */
 	private $httpResponse;
 
@@ -32,43 +35,43 @@ class ResourcePresenterTest extends \PHPUnit_Framework_TestCase
 	private $presenter;
 
 	/**
-	 * @var ResourceServer
+	 * @var ResourceServer|MockObject
 	 */
 	private $resourceServer;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
-		$this->httpRequest = $this->getMockBuilder(IRequest::class)->disableOriginalConstructor()->getMock();
-		$this->httpResponse = $this->getMockBuilder(IResponse::class)->disableOriginalConstructor()->getMock();
+		$this->httpRequest = $this->createMock(IRequest::class);
+		$this->httpResponse = $this->createMock(IResponse::class);
 
-		$this->resourceServer = $this->getMockBuilder(ResourceServer::class)->disableOriginalConstructor()->getMock();
+		$this->resourceServer = $this->createMock(ResourceServer::class);
 
 		$this->presenter = new ResourcePresenterMock();
 		$this->presenter->injectPrimary(null, null, null, $this->httpRequest, $this->httpResponse);
 		$this->presenter->resourceServer = $this->resourceServer;
 	}
 
-	public function testCheckRequirements()
+	public function testCheckRequirements(): void
 	{
 		$serverRequest = new ServerRequest();
 
 		$this->resourceServer->expects(self::once())->method('validateAuthenticatedRequest')->with($serverRequest)->willReturn($serverRequest);
 
 		$this->presenter->setServerRequest($serverRequest);
-		$this->presenter->onAuthorized[] = function (ServerRequestInterface $request) use ($serverRequest) {
+		$this->presenter->onAuthorized[] = function (ServerRequestInterface $request) use ($serverRequest): void {
 			self::assertSame($serverRequest, $request);
 		};
 		$this->presenter->run(new Request(''));
 	}
 
-	public function testOAuthException()
+	public function testOAuthException(): void
 	{
 		$serverRequest = new ServerRequest();
 
 		$this->resourceServer->expects(self::once())->method('validateAuthenticatedRequest')->with($serverRequest)->willThrowException(new OAuthServerException('message', 1, 'type', 2));
 
 		$this->presenter->setServerRequest($serverRequest);
-		$this->presenter->onAuthorized[] = function (ServerRequestInterface $request) use ($serverRequest) {
+		$this->presenter->onAuthorized[] = function (ServerRequestInterface $request) use ($serverRequest): void {
 			self::assertSame($serverRequest, $request);
 		};
 		$response = $this->presenter->run(new Request(''));
@@ -79,14 +82,14 @@ class ResourcePresenterTest extends \PHPUnit_Framework_TestCase
 		$response->send($this->httpRequest, $this->httpResponse);
 	}
 
-	public function testExceptionWithoutLogger()
+	public function testExceptionWithoutLogger(): void
 	{
 		$serverRequest = new ServerRequest();
 
 		$this->resourceServer->expects(self::once())->method('validateAuthenticatedRequest')->with($serverRequest)->willThrowException(new \Exception());
 
 		$this->presenter->setServerRequest($serverRequest);
-		$this->presenter->onAuthorized[] = function (ServerRequestInterface $request) use ($serverRequest) {
+		$this->presenter->onAuthorized[] = function (ServerRequestInterface $request) use ($serverRequest): void {
 			self::assertSame($serverRequest, $request);
 		};
 		$response = $this->presenter->run(new Request(''));
@@ -97,7 +100,7 @@ class ResourcePresenterTest extends \PHPUnit_Framework_TestCase
 		$response->send($this->httpRequest, $this->httpResponse);
 	}
 
-	public function testExceptionWithLogger()
+	public function testExceptionWithLogger(): void
 	{
 		$serverRequest = new ServerRequest();
 
@@ -105,12 +108,12 @@ class ResourcePresenterTest extends \PHPUnit_Framework_TestCase
 
 		$this->resourceServer->expects(self::once())->method('validateAuthenticatedRequest')->with($serverRequest)->willThrowException($exception);
 
-		$logger = $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock();
+		$logger = $this->createMock(LoggerInterface::class);
 		$logger->expects(self::once())->method('error')->with('ex', ['exception' => $exception]);
 
 		$this->presenter->setServerRequest($serverRequest);
 		$this->presenter->setLogger($logger);
-		$this->presenter->onAuthorized[] = function (ServerRequestInterface $request) use ($serverRequest) {
+		$this->presenter->onAuthorized[] = function (ServerRequestInterface $request) use ($serverRequest): void {
 			self::assertSame($serverRequest, $request);
 		};
 		$response = $this->presenter->run(new Request(''));
@@ -120,4 +123,5 @@ class ResourcePresenterTest extends \PHPUnit_Framework_TestCase
 		$this->expectOutputString('Unknown error');
 		$response->send($this->httpRequest, $this->httpResponse);
 	}
+
 }

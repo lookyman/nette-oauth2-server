@@ -11,6 +11,7 @@ use Zend\Diactoros\Stream;
 
 class Response implements ApplicationPsr7ResponseInterface
 {
+
 	/**
 	 * @var int
 	 */
@@ -22,16 +23,11 @@ class Response implements ApplicationPsr7ResponseInterface
 	private $headers = [];
 
 	/**
-	 * @var StreamInterface
+	 * @var StreamInterface|null
 	 */
 	private $stream;
 
-	/**
-	 * @param IRequest $httpRequest
-	 * @param IResponse $httpResponse
-	 * @return void
-	 */
-	public function send(IRequest $httpRequest, IResponse $httpResponse)
+	public function send(IRequest $httpRequest, IResponse $httpResponse): void
 	{
 		$httpResponse->setCode($this->code);
 		foreach ($this->headers as $name => $value) {
@@ -44,6 +40,8 @@ class Response implements ApplicationPsr7ResponseInterface
 	 * @param string $name
 	 * @param string|string[] $value
 	 * @return self
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function withHeader($name, $value)
 	{
@@ -52,12 +50,9 @@ class Response implements ApplicationPsr7ResponseInterface
 		return $response;
 	}
 
-	/**
-	 * @return StreamInterface
-	 */
-	public function getBody()
+	public function getBody(): StreamInterface
 	{
-		if (!$this->stream) {
+		if ($this->stream === null) {
 			$this->stream = new Stream('php://temp', 'r+');
 		}
 		return $this->stream;
@@ -67,6 +62,8 @@ class Response implements ApplicationPsr7ResponseInterface
 	 * @param int $code
 	 * @param string $reasonPhrase
 	 * @return self
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function withStatus($code, $reasonPhrase = '')
 	{
@@ -77,6 +74,7 @@ class Response implements ApplicationPsr7ResponseInterface
 
 	/**
 	 * @return self
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function withBody(StreamInterface $body)
 	{
@@ -86,7 +84,7 @@ class Response implements ApplicationPsr7ResponseInterface
 	}
 
 	/**
-	 * @throws NotImplementedException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function getProtocolVersion()
 	{
@@ -94,7 +92,8 @@ class Response implements ApplicationPsr7ResponseInterface
 	}
 
 	/**
-	 * @throws NotImplementedException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function withProtocolVersion($version)
 	{
@@ -102,7 +101,7 @@ class Response implements ApplicationPsr7ResponseInterface
 	}
 
 	/**
-	 * @throws NotImplementedException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function getHeaders()
 	{
@@ -110,7 +109,8 @@ class Response implements ApplicationPsr7ResponseInterface
 	}
 
 	/**
-	 * @throws NotImplementedException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function hasHeader($name)
 	{
@@ -118,7 +118,8 @@ class Response implements ApplicationPsr7ResponseInterface
 	}
 
 	/**
-	 * @throws NotImplementedException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function getHeader($name)
 	{
@@ -126,7 +127,8 @@ class Response implements ApplicationPsr7ResponseInterface
 	}
 
 	/**
-	 * @throws NotImplementedException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function getHeaderLine($name)
 	{
@@ -134,7 +136,8 @@ class Response implements ApplicationPsr7ResponseInterface
 	}
 
 	/**
-	 * @throws NotImplementedException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function withAddedHeader($name, $value)
 	{
@@ -142,7 +145,8 @@ class Response implements ApplicationPsr7ResponseInterface
 	}
 
 	/**
-	 * @throws NotImplementedException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function withoutHeader($name)
 	{
@@ -150,7 +154,7 @@ class Response implements ApplicationPsr7ResponseInterface
 	}
 
 	/**
-	 * @throws NotImplementedException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function getStatusCode()
 	{
@@ -158,7 +162,7 @@ class Response implements ApplicationPsr7ResponseInterface
 	}
 
 	/**
-	 * @throws NotImplementedException
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function getReasonPhrase()
 	{

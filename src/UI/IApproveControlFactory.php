@@ -7,9 +7,7 @@ use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
 
 interface IApproveControlFactory
 {
-	/**
-	 * @param AuthorizationRequest $authorizationRequest
-	 * @return ApproveControl
-	 */
+
 	public function create(AuthorizationRequest $authorizationRequest): ApproveControl;
+
 }

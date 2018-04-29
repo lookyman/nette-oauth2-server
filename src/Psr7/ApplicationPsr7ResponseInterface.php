@@ -8,4 +8,5 @@ use Psr\Http\Message\ResponseInterface;
 
 interface ApplicationPsr7ResponseInterface extends IResponse, ResponseInterface
 {
+
 }

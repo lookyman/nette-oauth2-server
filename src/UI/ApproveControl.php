@@ -6,6 +6,7 @@ namespace Lookyman\NetteOAuth2Server\UI;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
+use Lookyman\NetteOAuth2Server\Psr7\ApplicationPsr7ResponseInterface;
 use Nette\Application\AbortException;
 use Nette\Application\IResponse;
 use Nette\Application\UI\Control;
@@ -20,6 +21,7 @@ use Psr\Log\LoggerAwareTrait;
  */
 class ApproveControl extends Control implements LoggerAwareInterface
 {
+
 	use LoggerAwareTrait;
 	use Psr7Trait;
 	use SecuredLinksControlTrait;
@@ -49,59 +51,53 @@ class ApproveControl extends Control implements LoggerAwareInterface
 	 */
 	private $templateFile;
 
-	/**
-	 * @param AuthorizationServer $authorizationServer
-	 * @param Session $session
-	 * @param AuthorizationRequest $authorizationRequest
-	 */
 	public function __construct(AuthorizationServer $authorizationServer, Session $session, AuthorizationRequest $authorizationRequest)
 	{
+		parent::__construct();
 		$this->authorizationServer = $authorizationServer;
 		$this->session = $session;
 		$this->authorizationRequest = $authorizationRequest;
 		$this->templateFile = __DIR__ . '/templates/approve.latte';
 	}
 
-	public function render()
+	public function render(): void
 	{
 		$this->template->setFile($this->templateFile);
 		$this->template->authorizationRequest = $this->authorizationRequest;
 		$this->template->render();
 	}
 
-	/**
-	 * @secured
-	 */
-	public function handleApprove()
+	public function handleApprove(): void
 	{
 		$this->authorizationRequest->setAuthorizationApproved(true);
 		$this->completeAuthorizationRequest();
 	}
 
-	/**
-	 * @secured
-	 */
-	public function handleDeny()
+	public function handleDeny(): void
 	{
 		$this->authorizationRequest->setAuthorizationApproved(false);
 		$this->completeAuthorizationRequest();
 	}
 
-	private function completeAuthorizationRequest()
+	private function completeAuthorizationRequest(): void
 	{
 		$this->session->getSection(OAuth2Presenter::SESSION_NAMESPACE)->remove();
 
 		$response = $this->createResponse();
 		try {
-			$this->onResponse($this->authorizationServer->completeAuthorizationRequest($this->authorizationRequest, $response));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $this->authorizationServer->completeAuthorizationRequest($this->authorizationRequest, $response);
+			$this->onResponse($response);
 
 		} catch (AbortException $e) {
 			throw $e;
 
 		} catch (OAuthServerException $e) {
-			$this->onResponse($e->generateHttpResponse($response));
+			/** @var ApplicationPsr7ResponseInterface $response */
+			$response = $e->generateHttpResponse($response);
+			$this->onResponse($response);
 
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
 			if ($this->logger) {
 				$this->logger->error($e->getMessage(), ['exception' => $e]);
 			}
@@ -111,11 +107,9 @@ class ApproveControl extends Control implements LoggerAwareInterface
 		}
 	}
 
-	/**
-	 * @param string $file
-	 */
-	public function setTemplateFile(string $file)
+	public function setTemplateFile(string $file): void
 	{
 		$this->templateFile = $file;
 	}
+
 }

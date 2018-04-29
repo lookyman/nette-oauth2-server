@@ -7,6 +7,7 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
 
 class UserEntity implements UserEntityInterface
 {
+
 	/**
 	 * @var mixed
 	 */
@@ -27,4 +28,5 @@ class UserEntity implements UserEntityInterface
 	{
 		return $this->identifier;
 	}
+
 }

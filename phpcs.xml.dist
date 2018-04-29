@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="CS">
+    <rule ref="vendor/lookyman/coding-standard/LookymanCodingStandard/ruleset.xml">
+        <exclude name="Squiz.Arrays.ArrayDeclaration.KeySpecified"/>
+    </rule>
+</ruleset>

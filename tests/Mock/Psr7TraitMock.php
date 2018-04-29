@@ -10,6 +10,7 @@ use Psr\Http\Message\StreamInterface;
 
 class Psr7TraitMock
 {
+
 	use Psr7Trait;
 
 	/**
@@ -27,10 +28,11 @@ class Psr7TraitMock
 	 */
 	public $stream;
 
-	public function test()
+	public function test(): void
 	{
 		$this->serverRequest = $this->createServerRequest();
 		$this->response = $this->createResponse();
 		$this->stream = $this->createStream();
 	}
+
 }

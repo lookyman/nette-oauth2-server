@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace Lookyman\NetteOAuth2Server\Tests;
 
 use Lookyman\NetteOAuth2Server\RedirectConfig;
+use PHPUnit\Framework\TestCase;
 
-class RedirectConfigTest extends \PHPUnit_Framework_TestCase
+class RedirectConfigTest extends TestCase
 {
-	public function testGet()
+
+	public function testGet(): void
 	{
 		$config = new RedirectConfig('approve', 'login');
 		self::assertInternalType('array', $approve = $config->getApproveDestination());
@@ -21,7 +23,7 @@ class RedirectConfigTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @expectedException \Nette\InvalidStateException
 	 */
-	public function testEmptyApproveDestination()
+	public function testEmptyApproveDestination(): void
 	{
 		$config = new RedirectConfig(null, 'login');
 		$config->getApproveDestination();
@@ -30,9 +32,10 @@ class RedirectConfigTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @expectedException \Nette\InvalidStateException
 	 */
-	public function testEmptyLoginDestination()
+	public function testEmptyLoginDestination(): void
 	{
 		$config = new RedirectConfig('approve', null);
 		$config->getLoginDestination();
 	}
+
 }

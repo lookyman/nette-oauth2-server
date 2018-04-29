@@ -8,17 +8,20 @@ use League\OAuth2\Server\RequestTypes\AuthorizationRequest;
 use Lookyman\NetteOAuth2Server\UI\ApproveControl;
 use Lookyman\NetteOAuth2Server\UI\ApproveControlFactory;
 use Nette\Http\Session;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class ApproveControlFactoryTest extends \PHPUnit_Framework_TestCase
+class ApproveControlFactoryTest extends TestCase
 {
-	public function testCreate()
+
+	public function testCreate(): void
 	{
 		$factory = new ApproveControlFactory(
-			$this->getMockBuilder(AuthorizationServer::class)->disableOriginalConstructor()->getMock(),
-			$this->getMockBuilder(Session::class)->disableOriginalConstructor()->getMock()
+			$this->createMock(AuthorizationServer::class),
+			$this->createMock(Session::class)
 		);
-		$factory->setLogger($this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock());
+		$factory->setLogger($this->createMock(LoggerInterface::class));
 		self::assertInstanceOf(ApproveControl::class, $factory->create(new AuthorizationRequest()));
 	}
+
 }
