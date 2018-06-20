@@ -1,6 +1,8 @@
 Lookyman/NetteOAuth2Server
 ==========================
 
+[![Join the chat at https://gitter.im/nette-oauth2-server/Lobby](https://badges.gitter.im/nette-oauth2-server/Lobby.svg)](https://gitter.im/nette-oauth2-server/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Integration of [The League of Extraordinary Packages](https://thephpleague.com/)' [OAuth 2.0 Server](https://oauth2.thephpleague.com/) into [Nette Framework](https://nette.org/) - base package.
 
 [![Build Status](https://travis-ci.org/lookyman/nette-oauth2-server.svg?branch=master)](https://travis-ci.org/lookyman/nette-oauth2-server)
