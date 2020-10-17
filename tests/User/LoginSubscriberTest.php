@@ -33,7 +33,10 @@ class LoginSubscriberTest extends TestCase
 		$redirectConfig = $this->createMock(RedirectConfig::class);
 		$redirectConfig->expects(self::once())->method('getApproveDestination')->willReturn(['destination']);
 
-		$presenter = $this->createMock(Presenter::class);
+        $presenter = $this
+            ->getMockBuilder(Presenter::class)
+            ->setMethods(['getSession'])
+            ->getMock();
 		$presenter->expects(self::once())->method('getSession')->with(OAuth2Presenter::SESSION_NAMESPACE)->willReturn((object) ['authorizationRequest' => true]);
 		$presenter->expects(self::once())->method('redirect')->with('destination');
 
@@ -44,11 +47,10 @@ class LoginSubscriberTest extends TestCase
 		$subscriber->onLoggedIn($user);
 	}
 
-	/**
-	 * @expectedException \Nette\InvalidStateException
-	 */
 	public function testOnLoggedInNoPresenter(): void
 	{
+	    $this->expectException("\Nette\InvalidStateException");
+
 		$redirectConfig = $this->createMock(RedirectConfig::class);
 
 		$user = $this->createMock(User::class);

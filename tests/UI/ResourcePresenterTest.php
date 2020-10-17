@@ -78,7 +78,7 @@ class ResourcePresenterTest extends TestCase
 
 		self::assertInstanceOf(ApplicationPsr7ResponseInterface::class, $response);
 		$this->httpResponse->expects(self::once())->method('setCode')->with(2);
-		$this->expectOutputString('{"error":"type","message":"message"}');
+		$this->expectOutputString('{"error":"type","error_description":"message","message":"message"}');
 		$response->send($this->httpRequest, $this->httpResponse);
 	}
 

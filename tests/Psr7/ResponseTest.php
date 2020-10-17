@@ -72,10 +72,10 @@ class ResponseTest extends TestCase
 	/**
 	 * @param array $args
 	 * @dataProvider notImplementedProvider
-	 * @expectedException \Nette\NotImplementedException
 	 */
 	public function testNotImplemented(string $method, array $args): void
 	{
+	    $this->expectException("\Nette\NotImplementedException");
 		$response = new Response();
 		call_user_func_array([$response, $method], $args);
 	}

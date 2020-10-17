@@ -15,7 +15,11 @@ class UserRepositoryTest extends TestCase
 	public function testGetUserEntityByUserCredentials(): void
 	{
 		$client = $this->createMock(ClientEntityInterface::class);
-		$user = $this->createMock(User::class);
+        $user = $this
+            ->getMockBuilder(User::class)
+            ->setMethods("isLoggedIn")
+            ->disableOriginalConstructor()
+            ->getMock();
 		$user->expects(self::once())->method('login')->with('name', 'passwd', 'grant', $client);
 		$user->expects(self::once())->method('isLoggedIn')->willReturn(true);
 		$user->expects(self::once())->method('getId')->willReturn('id');

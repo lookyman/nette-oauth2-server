@@ -137,7 +137,11 @@ class OAuth2PresenterTest extends TestCase
 		$session = $this->getMockBuilder(Session::class)->disableOriginalConstructor()->getMock();
 		$session->expects(self::once())->method('getSection')->with(OAuth2Presenter::SESSION_NAMESPACE)->willReturn(new \stdClass());
 
-		$user = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
+        $user = $this
+            ->getMockBuilder(User::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isLoggedIn'])
+            ->getMock();
 		$user->expects(self::once())->method('isLoggedIn')->willReturn(false);
 
 		$request = new AuthorizationRequest();
@@ -169,8 +173,12 @@ class OAuth2PresenterTest extends TestCase
 		$session = $this->getMockBuilder(Session::class)->disableOriginalConstructor()->getMock();
 		$session->expects(self::once())->method('getSection')->with(OAuth2Presenter::SESSION_NAMESPACE)->willReturn(new \stdClass());
 
-		$user = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
-		$user->expects(self::once())->method('isLoggedIn')->willReturn(true);
+        $user = $this
+            ->getMockBuilder(User::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isLoggedIn'])
+            ->getMock();
+        $user->expects(self::once())->method('isLoggedIn')->willReturn(true);
 
 		$request = new AuthorizationRequest();
 
