@@ -53,7 +53,6 @@ class ApproveControl extends Control implements LoggerAwareInterface
 
 	public function __construct(AuthorizationServer $authorizationServer, Session $session, AuthorizationRequest $authorizationRequest)
 	{
-		parent::__construct();
 		$this->authorizationServer = $authorizationServer;
 		$this->session = $session;
 		$this->authorizationRequest = $authorizationRequest;

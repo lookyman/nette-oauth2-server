@@ -21,6 +21,7 @@ class ApprovePresenterTraitTest extends TestCase
 
 	public function testCreateComponentApprove(): void
 	{
+
 		$request = serialize(new AuthorizationRequest());
 
 		$serializer = $this->createMock(IAuthorizationRequestSerializer::class);
@@ -35,7 +36,11 @@ class ApprovePresenterTraitTest extends TestCase
 		$session = $this->createMock(Session::class);
 		$session->expects(self::once())->method('getSection')->with(OAuth2Presenter::SESSION_NAMESPACE)->willReturn($section);
 
-		$user = $this->createMock(User::class);
+        $user = $this
+            ->getMockBuilder(User::class)
+            ->setMethods(['isLoggedIn'])
+            ->disableOriginalConstructor()
+            ->getMock();
 		$user->expects(self::once())->method('isLoggedIn')->willReturn(true);
 		$user->expects(self::once())->method('getId')->willReturn(1);
 
